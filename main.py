@@ -713,7 +713,7 @@ def t_NUM_STRING(t):
     return t
 
 def t_MAP_ITEM(t):
-    r'\$[a-zA-Z_\x80-\xff][a-zA-Z0-9_\x80-\xff]*((\[\d+\])|(\[\".*\"\]))+'
+    r'\$[a-zA-Z_\x80-\xff][a-zA-Z0-9_\x80-\xff]*((\[\d+\])|(\[(\"|\').*(\"|\')\]))+'
     return t
 
 def t_VARIABLE(t):

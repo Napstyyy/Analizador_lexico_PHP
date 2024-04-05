@@ -1,4 +1,3 @@
-from re import M
 import ply.lex as lex
 import sys
 
@@ -280,10 +279,6 @@ def t_DNUMBER(t):
 
 def t_DO(t):
     r'do'
-    return t
-
-def t_DOC_COMMENT(t):
-    r'/\*\*.*\*/'
     return t
 
 def t_DOLLAR_OPEN_CURLY_BRACES(t):
@@ -569,6 +564,10 @@ def t_OR_EQUAL(t):
 def t_PLUS_EQUAL(t):
     r'\+='
     return t
+
+def t_DOC_COMMENT(t):
+    r'/\*\*(.|\n)*\*/'
+    pass
 
 def t_POW(t):
     r'\*\*'

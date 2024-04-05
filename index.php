@@ -1,39 +1,17 @@
 <?php
+// Database connection settings
 
-// Define a class
-class MyClass {
-    // Properties
-    public $prop1 = "I'm a class property!";
+$host$ = 'localhost';
+$correcto = 10.4;
+incorrecto$ = 2$;
 
-    // Methods
-    public function __construct() {
-        echo 'The class "', __CLASS__, '" was initiated!'."\n";
-    }
-
-    public function __destruct() {
-        echo 'The class "', __CLASS__, '" was destroyed.'."\n";
-    }
-
-    public function setProperty($newval) {
-        $this->prop1 = $newval;
-    }
-
-    public function getProperty() {
-        return $this->prop1 . "\n";
-    }
+for($a = 0; $i<4; $a++){
+    $++$;
+    ++;
 }
-
-// Create an object
-$obj = new MyClass;
-
-// Output class property
-echo $obj->getProperty();
-
-// Set new property value
-$obj->setProperty("I'm a new property value!");
-
-// Output class property again
-echo $obj->getProperty();
-
+/**
+$dbname = 'cms';
+$username = 'root';
+$password = '';
+*/
 ?>
-

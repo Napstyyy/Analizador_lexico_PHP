@@ -1,0 +1,499 @@
+Created by PLY version 3.11 (http://www.dabeaz.com/ply)
+
+Unused terminals:
+
+    ABSTRACT
+    ADD
+    AMPERSAND
+    AND_EQUAL
+    ARRAY
+    ARRAY_CAST
+    AS
+    ASSIGN
+    ATTRIBUTE
+    BOOLEAN_AND
+    BOOLEAN_OR
+    BOOL_CAST
+    BREAK
+    CALLABLE
+    CASE
+    CATCH
+    CBRA
+    CLASS
+    CLASS_C
+    CLONE
+    COALESCE
+    COALESCE_EQUAL
+    COMMA
+    COMMENT
+    CONCAT
+    CONCAT_EQUAL
+    CONST
+    CONSTANT_ENCAPSED_STRING
+    CONTINUE
+    CPAR
+    CURLY_OPEN
+    DEC
+    DECLARE
+    DEFAULT
+    DIR
+    DIV
+    DIV_EQUAL
+    DO
+    DOC_COMMENT
+    DOLLAR_OPEN_CURLY_BRACES
+    DOUBLE_ARROW
+    DOUBLE_CAST
+    DOUBLE_COLON
+    ECHO
+    ELLIPSIS
+    ELSE
+    ELSEIF
+    EMPTY
+    ENCAPSED_AND_WHITESPACE
+    ENDDECLARE
+    ENDFOR
+    ENDFOREACH
+    ENDIF
+    ENDSWITCH
+    ENDWHILE
+    ENUM
+    EVAL
+    EXIT
+    EXTENDS
+    FILE
+    FINAL
+    FINALLY
+    FN
+    FOR
+    FOREACH
+    FUNCTION
+    FUNC_C
+    GLOBAL
+    GOTO
+    HALT_COMPILER
+    HEREDOC
+    IF
+    IMPLEMENTS
+    INC
+    INCLUDE
+    INCLUDE_ONCE
+    INSTANCE_OF
+    INSTEADOF
+    INTERFACE
+    INT_CAST
+    ISSET
+    IS_EQUAL
+    IS_GREATER_OR_EQUAL
+    IS_IDENTICAL
+    IS_NOT_EQUAL
+    IS_NOT_IDENTICAL
+    IS_SMALLER_OR_EQUAL
+    LINE
+    LIST
+    LNUMBER
+    LOGICAL_AND
+    LOGICAL_OR
+    LOGICAL_XOR
+    MAP_ITEM
+    MATCH
+    METHOD_C
+    MINUS_EQUAL
+    MUL
+    NAMESPACE
+    NAME_FULLY_QUALIFIED
+    NAME_QUALIFIED
+    NEW
+    NS_C
+    NS_SEPARATOR
+    NULLSAFE_OBJECT_OPERATOR
+    NUM_STRING
+    OBJECT_CAST
+    OBJECT_OPERATOR
+    OBRA
+    OPAR
+    OR_EQUAL
+    PLUS_EQUAL
+    POW
+    POW_EQUAL
+    PRINT
+    PRIVATE
+    PROTECTED
+    PUBLIC
+    READONLY
+    REQUIRE
+    REQUIRE_ONCE
+    RETURN
+    SL
+    SL_EQUAL
+    SPACESHIP
+    SR
+    SR_EQUAL
+    STRING
+    STRING_CAST
+    STRING_VARNAME
+    SUB
+    SWITCH
+    THROW
+    TRAIT
+    TRAIT_C
+    TRY
+    UNSET
+    UNSET_CAST
+    USE
+    VAR
+    VARIABLE
+    WHILE
+    WHITESPACE
+    XOR_EQUAL
+    YIELD
+    YIELD_FROM
+
+Grammar
+
+Rule 0     S' -> script
+Rule 1     script -> script_section
+Rule 2     script -> script script_section
+Rule 3     script_section -> start_tag
+Rule 4     script_section -> function_static_declaration
+Rule 5     script_section -> end_tag
+Rule 6     start_tag -> OPEN_TAG
+Rule 7     start_tag -> OPEN_TAG_WITH_ECHO
+Rule 8     end_tag -> CLOSE_TAG
+Rule 9     function_static_declaration -> STATIC static_variable_name_list ENDLINE
+Rule 10    static_variable_name_list -> DNUMBER
+
+Terminals, with rules where they appear
+
+ABSTRACT             : 
+ADD                  : 
+AMPERSAND            : 
+AND_EQUAL            : 
+ARRAY                : 
+ARRAY_CAST           : 
+AS                   : 
+ASSIGN               : 
+ATTRIBUTE            : 
+BOOLEAN_AND          : 
+BOOLEAN_OR           : 
+BOOL_CAST            : 
+BREAK                : 
+CALLABLE             : 
+CASE                 : 
+CATCH                : 
+CBRA                 : 
+CLASS                : 
+CLASS_C              : 
+CLONE                : 
+CLOSE_TAG            : 8
+COALESCE             : 
+COALESCE_EQUAL       : 
+COMMA                : 
+COMMENT              : 
+CONCAT               : 
+CONCAT_EQUAL         : 
+CONST                : 
+CONSTANT_ENCAPSED_STRING : 
+CONTINUE             : 
+CPAR                 : 
+CURLY_OPEN           : 
+DEC                  : 
+DECLARE              : 
+DEFAULT              : 
+DIR                  : 
+DIV                  : 
+DIV_EQUAL            : 
+DNUMBER              : 10
+DO                   : 
+DOC_COMMENT          : 
+DOLLAR_OPEN_CURLY_BRACES : 
+DOUBLE_ARROW         : 
+DOUBLE_CAST          : 
+DOUBLE_COLON         : 
+ECHO                 : 
+ELLIPSIS             : 
+ELSE                 : 
+ELSEIF               : 
+EMPTY                : 
+ENCAPSED_AND_WHITESPACE : 
+ENDDECLARE           : 
+ENDFOR               : 
+ENDFOREACH           : 
+ENDIF                : 
+ENDLINE              : 9
+ENDSWITCH            : 
+ENDWHILE             : 
+ENUM                 : 
+EVAL                 : 
+EXIT                 : 
+EXTENDS              : 
+FILE                 : 
+FINAL                : 
+FINALLY              : 
+FN                   : 
+FOR                  : 
+FOREACH              : 
+FUNCTION             : 
+FUNC_C               : 
+GLOBAL               : 
+GOTO                 : 
+HALT_COMPILER        : 
+HEREDOC              : 
+IF                   : 
+IMPLEMENTS           : 
+INC                  : 
+INCLUDE              : 
+INCLUDE_ONCE         : 
+INSTANCE_OF          : 
+INSTEADOF            : 
+INTERFACE            : 
+INT_CAST             : 
+ISSET                : 
+IS_EQUAL             : 
+IS_GREATER_OR_EQUAL  : 
+IS_IDENTICAL         : 
+IS_NOT_EQUAL         : 
+IS_NOT_IDENTICAL     : 
+IS_SMALLER_OR_EQUAL  : 
+LINE                 : 
+LIST                 : 
+LNUMBER              : 
+LOGICAL_AND          : 
+LOGICAL_OR           : 
+LOGICAL_XOR          : 
+MAP_ITEM             : 
+MATCH                : 
+METHOD_C             : 
+MINUS_EQUAL          : 
+MUL                  : 
+NAMESPACE            : 
+NAME_FULLY_QUALIFIED : 
+NAME_QUALIFIED       : 
+NEW                  : 
+NS_C                 : 
+NS_SEPARATOR         : 
+NULLSAFE_OBJECT_OPERATOR : 
+NUM_STRING           : 
+OBJECT_CAST          : 
+OBJECT_OPERATOR      : 
+OBRA                 : 
+OPAR                 : 
+OPEN_TAG             : 6
+OPEN_TAG_WITH_ECHO   : 7
+OR_EQUAL             : 
+PLUS_EQUAL           : 
+POW                  : 
+POW_EQUAL            : 
+PRINT                : 
+PRIVATE              : 
+PROTECTED            : 
+PUBLIC               : 
+READONLY             : 
+REQUIRE              : 
+REQUIRE_ONCE         : 
+RETURN               : 
+SL                   : 
+SL_EQUAL             : 
+SPACESHIP            : 
+SR                   : 
+SR_EQUAL             : 
+STATIC               : 9
+STRING               : 
+STRING_CAST          : 
+STRING_VARNAME       : 
+SUB                  : 
+SWITCH               : 
+THROW                : 
+TRAIT                : 
+TRAIT_C              : 
+TRY                  : 
+UNSET                : 
+UNSET_CAST           : 
+USE                  : 
+VAR                  : 
+VARIABLE             : 
+WHILE                : 
+WHITESPACE           : 
+XOR_EQUAL            : 
+YIELD                : 
+YIELD_FROM           : 
+error                : 
+
+Nonterminals, with rules where they appear
+
+end_tag              : 5
+function_static_declaration : 4
+script               : 2 0
+script_section       : 1 2
+start_tag            : 3
+static_variable_name_list : 9
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . script
+    (1) script -> . script_section
+    (2) script -> . script script_section
+    (3) script_section -> . start_tag
+    (4) script_section -> . function_static_declaration
+    (5) script_section -> . end_tag
+    (6) start_tag -> . OPEN_TAG
+    (7) start_tag -> . OPEN_TAG_WITH_ECHO
+    (9) function_static_declaration -> . STATIC static_variable_name_list ENDLINE
+    (8) end_tag -> . CLOSE_TAG
+
+    OPEN_TAG        shift and go to state 6
+    OPEN_TAG_WITH_ECHO shift and go to state 7
+    STATIC          shift and go to state 8
+    CLOSE_TAG       shift and go to state 9
+
+    script                         shift and go to state 1
+    script_section                 shift and go to state 2
+    start_tag                      shift and go to state 3
+    function_static_declaration    shift and go to state 4
+    end_tag                        shift and go to state 5
+
+state 1
+
+    (0) S' -> script .
+    (2) script -> script . script_section
+    (3) script_section -> . start_tag
+    (4) script_section -> . function_static_declaration
+    (5) script_section -> . end_tag
+    (6) start_tag -> . OPEN_TAG
+    (7) start_tag -> . OPEN_TAG_WITH_ECHO
+    (9) function_static_declaration -> . STATIC static_variable_name_list ENDLINE
+    (8) end_tag -> . CLOSE_TAG
+
+    OPEN_TAG        shift and go to state 6
+    OPEN_TAG_WITH_ECHO shift and go to state 7
+    STATIC          shift and go to state 8
+    CLOSE_TAG       shift and go to state 9
+
+    script_section                 shift and go to state 10
+    start_tag                      shift and go to state 3
+    function_static_declaration    shift and go to state 4
+    end_tag                        shift and go to state 5
+
+state 2
+
+    (1) script -> script_section .
+
+    OPEN_TAG        reduce using rule 1 (script -> script_section .)
+    OPEN_TAG_WITH_ECHO reduce using rule 1 (script -> script_section .)
+    STATIC          reduce using rule 1 (script -> script_section .)
+    CLOSE_TAG       reduce using rule 1 (script -> script_section .)
+    $end            reduce using rule 1 (script -> script_section .)
+
+
+state 3
+
+    (3) script_section -> start_tag .
+
+    OPEN_TAG        reduce using rule 3 (script_section -> start_tag .)
+    OPEN_TAG_WITH_ECHO reduce using rule 3 (script_section -> start_tag .)
+    STATIC          reduce using rule 3 (script_section -> start_tag .)
+    CLOSE_TAG       reduce using rule 3 (script_section -> start_tag .)
+    $end            reduce using rule 3 (script_section -> start_tag .)
+
+
+state 4
+
+    (4) script_section -> function_static_declaration .
+
+    OPEN_TAG        reduce using rule 4 (script_section -> function_static_declaration .)
+    OPEN_TAG_WITH_ECHO reduce using rule 4 (script_section -> function_static_declaration .)
+    STATIC          reduce using rule 4 (script_section -> function_static_declaration .)
+    CLOSE_TAG       reduce using rule 4 (script_section -> function_static_declaration .)
+    $end            reduce using rule 4 (script_section -> function_static_declaration .)
+
+
+state 5
+
+    (5) script_section -> end_tag .
+
+    OPEN_TAG        reduce using rule 5 (script_section -> end_tag .)
+    OPEN_TAG_WITH_ECHO reduce using rule 5 (script_section -> end_tag .)
+    STATIC          reduce using rule 5 (script_section -> end_tag .)
+    CLOSE_TAG       reduce using rule 5 (script_section -> end_tag .)
+    $end            reduce using rule 5 (script_section -> end_tag .)
+
+
+state 6
+
+    (6) start_tag -> OPEN_TAG .
+
+    OPEN_TAG        reduce using rule 6 (start_tag -> OPEN_TAG .)
+    OPEN_TAG_WITH_ECHO reduce using rule 6 (start_tag -> OPEN_TAG .)
+    STATIC          reduce using rule 6 (start_tag -> OPEN_TAG .)
+    CLOSE_TAG       reduce using rule 6 (start_tag -> OPEN_TAG .)
+    $end            reduce using rule 6 (start_tag -> OPEN_TAG .)
+
+
+state 7
+
+    (7) start_tag -> OPEN_TAG_WITH_ECHO .
+
+    OPEN_TAG        reduce using rule 7 (start_tag -> OPEN_TAG_WITH_ECHO .)
+    OPEN_TAG_WITH_ECHO reduce using rule 7 (start_tag -> OPEN_TAG_WITH_ECHO .)
+    STATIC          reduce using rule 7 (start_tag -> OPEN_TAG_WITH_ECHO .)
+    CLOSE_TAG       reduce using rule 7 (start_tag -> OPEN_TAG_WITH_ECHO .)
+    $end            reduce using rule 7 (start_tag -> OPEN_TAG_WITH_ECHO .)
+
+
+state 8
+
+    (9) function_static_declaration -> STATIC . static_variable_name_list ENDLINE
+    (10) static_variable_name_list -> . DNUMBER
+
+    DNUMBER         shift and go to state 12
+
+    static_variable_name_list      shift and go to state 11
+
+state 9
+
+    (8) end_tag -> CLOSE_TAG .
+
+    OPEN_TAG        reduce using rule 8 (end_tag -> CLOSE_TAG .)
+    OPEN_TAG_WITH_ECHO reduce using rule 8 (end_tag -> CLOSE_TAG .)
+    STATIC          reduce using rule 8 (end_tag -> CLOSE_TAG .)
+    CLOSE_TAG       reduce using rule 8 (end_tag -> CLOSE_TAG .)
+    $end            reduce using rule 8 (end_tag -> CLOSE_TAG .)
+
+
+state 10
+
+    (2) script -> script script_section .
+
+    OPEN_TAG        reduce using rule 2 (script -> script script_section .)
+    OPEN_TAG_WITH_ECHO reduce using rule 2 (script -> script script_section .)
+    STATIC          reduce using rule 2 (script -> script script_section .)
+    CLOSE_TAG       reduce using rule 2 (script -> script script_section .)
+    $end            reduce using rule 2 (script -> script script_section .)
+
+
+state 11
+
+    (9) function_static_declaration -> STATIC static_variable_name_list . ENDLINE
+
+    ENDLINE         shift and go to state 13
+
+
+state 12
+
+    (10) static_variable_name_list -> DNUMBER .
+
+    ENDLINE         reduce using rule 10 (static_variable_name_list -> DNUMBER .)
+
+
+state 13
+
+    (9) function_static_declaration -> STATIC static_variable_name_list ENDLINE .
+
+    OPEN_TAG        reduce using rule 9 (function_static_declaration -> STATIC static_variable_name_list ENDLINE .)
+    OPEN_TAG_WITH_ECHO reduce using rule 9 (function_static_declaration -> STATIC static_variable_name_list ENDLINE .)
+    STATIC          reduce using rule 9 (function_static_declaration -> STATIC static_variable_name_list ENDLINE .)
+    CLOSE_TAG       reduce using rule 9 (function_static_declaration -> STATIC static_variable_name_list ENDLINE .)
+    $end            reduce using rule 9 (function_static_declaration -> STATIC static_variable_name_list ENDLINE .)
+

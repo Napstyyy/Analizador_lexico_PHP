@@ -1,10 +1,7 @@
-from re import M
 import ply.lex as lex
 import sys
 
 tokens = (
-    'PHP_OPEN',
-    'PHP_CLOSE',
     'ABSTRACT',
     'AMPERSAND',
     'AND_EQUAL',

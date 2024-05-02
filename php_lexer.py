@@ -182,8 +182,8 @@ tokens = (
     'COLON',
     'TICKS',
     'ENCODING',
-    'STRICT_TYPES'
-    
+    'STRICT_TYPES',
+    'ITERABLE',
 )
 
 #Regular expression rules for simple tokens
@@ -788,6 +788,22 @@ def t_UNSET(t):
     r'unset'
     return t
 
+def t_TICKS(t):
+    r'ticks'
+    return t
+
+def t_ENCODING(t):
+    r'encoding'
+    return t
+
+def t_STRICT_TYPES(t):
+    r'strict_types'
+    return t
+
+def t_ITERABLE(t):
+    r'iterable'
+    return t
+
 def t_STRING(t):
     r'[a-zA-Z_\x80-\xff][a-zA-Z0-9_\x80-\xff]*'
     return t
@@ -816,17 +832,6 @@ def t_COMMENT(t):
     r'//.*\n'
     pass
 
-def t_TICKS(t):
-    r'ticks'
-    return t
-
-def t_ENCODING(t):
-    r'encoding'
-    return t
-
-def t_STRICT_TYPES(t):
-    r'strict_types'
-    return t
 
 t_ignore = ' \t\n'
 

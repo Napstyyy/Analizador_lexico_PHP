@@ -669,6 +669,7 @@ def p_foreach_key(p):
 
 def p_foreach_value(p):
     '''foreach_value                    :   AMPERSAND expression
+                                        |   expression
                                         |   list_intrinsic
     '''
 
@@ -681,7 +682,7 @@ def p_jump_statement(p):
     '''
 
 def p_goto_statement(p):
-    '''goto_statement                   : GOTO name ENDLINE
+    '''goto_statement                   : GOTO STRING ENDLINE
     '''
 
 def p_continue_statement(p):
@@ -758,7 +759,109 @@ def p_unset_statement(p):
                                         |   UNSET OPAR variable_list COMMA CPAR ENDLINE
     '''
 
-# Oe nigg sigue la parte del link que usted me mando que dice "FUNCTIONS si puedo ahora mas tarde le doy mas lo que pasa es que tengo que aprenderme las cosas de memoria para arquitectura rip lmfao quier pene"
+def p_function_definition(p):
+    '''function_definition              :   function_definition_header compound_statement
+    '''
+
+def p_function_definition_header(p):
+    '''function_definitio_header        :   FUNCTION AMPERSAND STRING OPAR parameter_declaration_list CPAR return_type
+                                        |   FUNCTION STRING OPAR parameter_declaration_list CPAR return_type
+                                        |   FUNCTION STRING OPAR parameter_declaration_list CPAR
+                                        |   FUNCTION STRING OPAR CPAR return_type
+                                        |   FUNCTION STRING OPAR CPAR
+                                        |   FUNCTION AMPERSAND STRING OPAR CPAR return_type
+                                        |   FUNCTION AMPERSAND STRING OPAR CPAR
+                                        |   FUNCTION AMPERSAND STRING OPAR parameter_declaration_list CPAR
+    '''
+
+def p_parameter_declaration_list(p):
+    '''parameter_declaration_list       :   simple_parameter_declaration_list
+                                        |   variadic_parameter_declaration_list
+    '''
+
+
+def p_simple_parameter_declaration_list(p):
+    '''simple_parameter_declaration_list :   parameter_declaration
+                                        |   parameter_declaration_list COMMA parameter_declaration
+    '''
+
+def p_variadic_parameter_declaration_list(p):
+    '''variadic_parameter_declaration_list :   simple_parameter_declaration_list COMMA variadic_parameter
+                                        |   variadic_parameter
+    '''
+
+def p_parameter_declaration(p):
+    '''parameter_declaration            :   type_declaration AMPERSAND VARIABLE default_argument_specifier
+                                        |   AMPERSAND VARIABLE default_argument_specifier
+                                        |   VARIABLE default_argument_specifier
+                                        |   VARIABLE 
+                                        |   AMPERSAND VARIABLE 
+                                        |   type_declaration AMPERSAND VARIABLE 
+                                        |   type_declaration VARIABLE 
+                                        |   type_declaration VARIABLE default_argument_specifier 
+    '''
+
+def p_variadic_parameter(p):
+    '''variadic_parameter               :   type_declaration AMPERSAND  ELLIPSIS VARIABLE
+                                        |   type_declaration ELLIPSIS VARIABLE
+                                        |   ELLIPSIS VARIABLE
+                                        |   type_declaration VARIABLE
+    '''
+
+def p_return_type(p):
+    '''return_type                      :   COLON type_declaration
+                                        |   VOID
+    '''
+
+def p_type_declaration(p):
+    '''type_declaration                 :   CONDITIONAL base_type_declaration 
+                                        |   base_type_declaration
+    '''
+
+def p_base_type_declaration(p):
+    '''base_type_declaration            :   ARRAY
+                                        |   CALLABLE
+                                        |   ITERABLE
+                                        |   scalar_type
+                                        |   qualified_name
+    '''
+
+def p_scalar_type(p):
+    '''scalar_type                      :   BOOL
+                                        |   FLOAT
+                                        |   INT
+                                        |   STRINGKW
+    '''
+    
+def p_default_argument_specifier(p):
+    '''default_argument_specifier       :   ASSIGN constant_expression
+    '''
+
+def p_class_declaration(p):
+    '''class_declaration                :   class_modifier CLASS STRING class_base_clause class_interface_clause OBRA class_member_declaration CBRA
+                                        |   class_modifier CLASS STRING class_base_clause class_interface_clause OBRACBRA
+                                        |   class_modifier CLASS STRING class_base_clause OBRACBRA
+                                        |   class_modifier CLASS STRING OBRACBRA
+                                        |   CLASS STRING OBRACBRA
+                                        |   class_modifier CLASS STRING class_base_clause OBRA class_member_declaration CBRA
+                                        |   class_modifier CLASS STRING OBRA class_member_declaration CBRA
+                                        |   CLASS STRING OBRA class_member_declaration CBRA
+                                        |   class_modifier CLASS STRING class_interface_clause OBRA class_member_declaration CBRA
+                                        |    CLASS STRING class_interface_clause OBRA class_member_declaration CBRA
+    '''
+
+def p_class_modifier(p):
+    '''class_modifier                   :   ABSTRACT 
+                                        |   FINAL'''
+
+def p_class_base_clause(p):
+    '''class_base_clause                :   EXTENDS qualified_name 
+    '''
+
+def p_class_interface_clause(p):
+    '''class_interface_clause           :   IMPLEMENTS qualified_name
+                                        |   class_interface_clause COMMA qualified_name
+    '''
 
 def p_error(p):
     if VERBOSE:

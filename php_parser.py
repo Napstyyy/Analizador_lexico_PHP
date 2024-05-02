@@ -635,7 +635,130 @@ def p_for_statement(p):
                                         |   FOR OPAR for_initializer ENDLINE ENDLINE CPAR COLON statement_list ENDFOR ENDLINE 
                                         '''
 
-#CONTINUAR EN FOR INITIALIZER
+def p_for_initializer(p):
+    '''for_initializer                  :   for_expression_group
+    '''
+    
+def p_for_control(p):
+    '''for_control                      :   for_expression_group
+    '''
+
+def p_for_end_of_loop(p):
+    '''for_end_of_loop                  :   for_expression_group
+    '''
+    
+def p_for_expression_group(p):
+    '''for_expression_group             :   expression
+                                        |   for_expression_group COMMA expression
+    '''
+
+def p_foreach_statement(p):
+    '''foreach_statement                :   FOREACH OPAR foreach_collection_name AS foreach_key foreach_value CPAR statement
+                                        |   FOREACH OPAR foreach_collection_name AS foreach_key foreach_value CPAR COLON statement_list ENDFOREACH ENDLINE
+                                        |   FOREACH OPAR foreach_collection_name AS foreach_value CPAR statement
+                                        |   FOREACH OPAR foreach_collection_name AS foreach_key CPAR COLON statement_list ENDFOREACH ENDLINE
+    '''
+    
+def p_foreach_collection_name(p):
+    '''foreach_collection_name          :   expression
+    '''
+    
+def p_foreach_key(p):
+    '''foreach_key                      :   expression DOUBLE_ARROW
+    '''
+
+def p_foreach_value(p):
+    '''foreach_value                    :   AMPERSAND expression
+                                        |   list_intrinsic
+    '''
+
+def p_jump_statement(p):
+    '''jump_statement                   :   goto_statement
+                                        |   continue_statement
+                                        |   break_statement
+                                        |   return_statement
+                                        |   throw_statement
+    '''
+
+def p_goto_statement(p):
+    '''goto_statement                   : GOTO name ENDLINE
+    '''
+
+def p_continue_statement(p):
+    '''continue_statement                   : CONTINUE ENDLINE
+                                            | CONTINUE breakout_level ENDLINE
+    '''
+    
+def p_breakout_level(p):
+    '''breakout_level                       : integer_literal
+                                            | OPAR breakout_level CPAR
+    '''
+    
+def p_break_statement(p):
+    '''break_statement                      : BREAK ENDLINE
+                                            | BREAK breakout_level ENDLINE
+    '''
+
+def p_return_statement(p):
+    '''return_statement                     : RETURN ENDLINE
+                                            | RETURN expression ENDLINE
+    '''
+
+def p_throw_statement(p):
+    '''throw_statement                     :  THROW expression ENDLINE
+    '''
+    
+def p_try_statement(p):
+    '''try_statement                    :   TRY compound_statement catch_clauses
+                                        |   TRY compound_statement finally_clause
+                                        |   TRY compound_statement catch_clauses finally_clause
+    '''
+
+def p_catch_clauses(p):
+    '''catch_clauses                    :   catch_clause
+                                        |   catch_clauses catch_clause
+    '''
+
+def p_catch_clause(p):
+    '''catch_clause                     :   CATCH OPAR catch_name_list variable_name CPAR compound_statement
+    '''
+
+def p_catch_name_list(p):
+    '''catch_name_list                  :   qualified_name
+                                        |   catch_name_list BITWISE_OR qualified_name
+    '''
+
+def p_finally_clause(p):
+    '''finally_clause                   :   FINALLY compound_statement
+    '''
+    
+def p_declare_statement(p):
+    '''declare_statement                :   DECLARE OPAR declare_directive CPAR statement
+                                        |   DECLARE OPAR declare_directive CPAR COLON statement_list ENDDECLARE ENDLINE
+                                        |   DECLARE OPAR declare_directive CPAR ENDLINE
+    '''
+
+def p_declare_directive(p):
+    '''declare_directive                :   TICKS ASSIGN literal
+                                        |   ENCODING ASSIGN literal
+                                        |   STRICT_TYPES ASSIGN literal
+    '''
+
+def p_echo_statement(p):
+    '''echo_statement                   :   ECHO expression_list ENDLINE
+    '''
+
+def p_expression_list(p):
+    '''expression_list                  :   expression
+                                        |   expression_list COMMA expression
+    '''
+    
+def p_unset_statement(p):
+    '''unset_statement                  :   UNSET OPAR variable_list CPAR ENDLINE
+                                        |   UNSET OPAR variable_list COMMA CPAR ENDLINE
+    '''
+
+# Oe nigg sigue la parte del link que usted me mando que dice "FUNCTIONS si puedo ahora mas tarde le doy mas lo que pasa es que tengo que aprenderme las cosas de memoria para arquitectura rip lmfao quier pene"
 
 def p_error(p):
     if VERBOSE:

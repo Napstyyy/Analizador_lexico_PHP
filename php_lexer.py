@@ -179,7 +179,11 @@ tokens = (
     'BITWISE_XOR',
     'BITWISE_OR',
     'CONDITIONAL',
-    'COLON'
+    'COLON',
+    'TICKS',
+    'ENCODING',
+    'STRICT_TYPES'
+    
 )
 
 #Regular expression rules for simple tokens
@@ -811,6 +815,18 @@ def t_PARENT(t):
 def t_COMMENT(t):
     r'//.*\n'
     pass
+
+def t_TICKS(t):
+    r'ticks'
+    return t
+
+def t_ENCODING(t):
+    r'encoding'
+    return t
+
+def t_STRICT_TYPES(t):
+    r'strict_types'
+    return t
 
 t_ignore = ' \t\n'
 

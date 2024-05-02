@@ -27,7 +27,7 @@ tokens = (
     'CONST',
     'CONSTANT_ENCAPSED_STRING',
     'CONTINUE',
-    'CURLY_OPEN',
+    # 'CURLY_OPEN',
     'DEC',
     'DECLARE',
     'DEFAULT',
@@ -36,7 +36,7 @@ tokens = (
     'DNUMBER',
     'DO',
     'DOC_COMMENT',
-    'DOLLAR_OPEN_CURLY_BRACES',
+    # 'DOLLAR_OPEN_CURLY_BRACES',
     'DOUBLE_ARROW',
     'DOUBLE_CAST',
     'DOUBLE_COLON',
@@ -153,7 +153,33 @@ tokens = (
     'SUB',
     'MUL',
     'DIV',
-    'MAP_ITEM'
+    'MAP_ITEM',
+    'LT',
+    'GT',
+    'DOLLAR',
+    'OBRACK',
+    'CBRACK',
+    'BACKQUOTE',
+    'SELF',
+    'PARENT',
+    'NEG',
+    'AT',
+    'BINARY',
+    'BOOL',
+    'BOOLEAN',
+    'DOUBLE',
+    'INT',
+    'INTEGER',
+    'FLOAT',
+    'OBJECT',
+    'REAL',
+    'STRINGKW',
+    'NOT',
+    'MOD',
+    'BITWISE_XOR',
+    'BITWISE_OR',
+    'CONDITIONAL',
+    'COLON'
 )
 
 #Regular expression rules for simple tokens
@@ -170,13 +196,26 @@ t_ADD = r'\+'
 t_SUB = r'\-'
 t_MUL = r'\*'
 t_DIV = r'\/'
+t_MOD = r'\%'
+t_LT = r'\<'
+t_GT = r'\>'
+t_DOLLAR = r'\$'
+t_OBRACK = r'\['
+t_CBRACK = r'\]'
+t_NEG = r'\~'
+t_AT = r'\@'
+t_NOT = r'!'
+t_BITWISE_XOR = r'\^'
+t_BITWISE_OR = r'\|'
+t_CONDITIONAL = r'\?'
+t_COLON = r'\:'
 
 def t_AND_EQUAL(t):
     r'\&='
     return t
 
 def t_ARRAY(t):
-    r'array\(\)'
+    r'array'
     return t
 
 def t_ARRAY_CAST(t):
@@ -243,17 +282,21 @@ def t_CONST(t):
     r'const'
     return t
 
+def t_CONCAT_EQUAL(t):
+    r'\.='
+    return t
+
 def t_CONSTANT_ENCAPSED_STRING(t):
-    r'("[^"]*")|(\'.*\')'
+    r'("[^"]*")|(\'.*\')|(\`.*\`)'
     return t
 
 def t_CONTINUE(t):
     r'continue'
     return t
 
-def t_CURLY_OPEN(t):
-    r'\{\$'
-    return t
+# def t_CURLY_OPEN(t):
+#     r'\{\$'
+#     return t
 
 def t_DEC(t):
     r'--'
@@ -279,13 +322,9 @@ def t_DO(t):
     r'do'
     return t
 
-def t_DOC_COMMENT(t):
-    r'/\*\*.*\*/'
-    return t
-
-def t_DOLLAR_OPEN_CURLY_BRACES(t):
-    r'\$\{'
-    return t
+# def t_DOLLAR_OPEN_CURLY_BRACES(t):
+#     r'\$\{'
+#     return t
 
 def t_DOUBLE_ARROW(t):
     r'=\>'
@@ -476,7 +515,7 @@ def t_LINE(t):
     return t
 
 def t_LIST(t):
-    r'list\(\)'
+    r'list'
     return t
 
 def t_LNUMBER(t):
@@ -566,6 +605,10 @@ def t_OR_EQUAL(t):
 def t_PLUS_EQUAL(t):
     r'\+='
     return t
+
+def t_DOC_COMMENT(t):
+    r'/\*\*(.|\n)*\*/'
+    pass
 
 def t_POW(t):
     r'\*\*'
@@ -665,10 +708,6 @@ def t_TRY(t):
     r'try'
     return t
 
-def t_UNSET(t):
-    r'unset\(\)'
-    return t
-
 def t_UNSET_CAST(t):
     r'\(unset\)'
     return t
@@ -701,6 +740,50 @@ def t_YIELD_FROM(t):
     r'yield from'
     return t
 
+def t_BINARY(t):
+    r'binary'
+    return t
+
+def t_BOOL(t):
+    r'bool'
+    return t
+
+def t_BOOLEAN(t):
+    r'boolean'
+    return t
+
+def t_DOUBLE(t):
+    r'double'
+    return t
+
+def t_INT(t):
+    r'int'
+    return t
+
+def t_INTEGER(t):
+    r'integer'
+    return t
+
+def t_FLOAT(t):
+    r'float'
+    return t
+
+def t_OBJECT(t):
+    r'object'
+    return t
+
+def t_REAL(t):
+    r'real'
+    return t
+
+def t_STRINGKW(t):
+    r'string'
+    return t
+
+def t_UNSET(t):
+    r'unset'
+    return t
+
 def t_STRING(t):
     r'[a-zA-Z_\x80-\xff][a-zA-Z0-9_\x80-\xff]*'
     return t
@@ -715,6 +798,14 @@ def t_MAP_ITEM(t):
 
 def t_VARIABLE(t):
     r'\$[a-zA-Z_\x80-\xff][a-zA-Z0-9_\x80-\xff]*'
+    return t
+
+def t_SELF(t):
+    r'self'
+    return t
+
+def t_PARENT(t):
+    r'parent'
     return t
 
 def t_COMMENT(t):

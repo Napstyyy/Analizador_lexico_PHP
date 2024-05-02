@@ -121,8 +121,7 @@ def p_variable_list(p):
                                         |   variable_list COMMA variable'''
 
 def p_anonymous_function_creation_expression(p):
-    '''anonymous_function_creation_expression
-                                        :   STATIC FUNCTION AMPERSAND OPAR parameter_declaration_list CPAR return_type compund_statement
+    '''anonymous_function_creation_expression :   STATIC FUNCTION AMPERSAND OPAR parameter_declaration_list CPAR return_type compund_statement
                                         |   FUNCTION OPAR CPAR compound_statement
                                         |   FUNCTION OPAR parameter_declaration_list CPAR return_type compound_statement
                                         |   FUNCTION AMPERSAND OPAR parameter_declaration_list CPAR return_type compound_statement
@@ -142,8 +141,6 @@ def p_object_creation_expression(p):
                                         |   NEW CLASS OPAR argument_expression_list CPAR class_base_clause OBRA class_member_declaration CBRA
                                         |   NEW CLASS OPAR argument_expression_list CPAR class_interface_clause OBRA class_member_declaration CBRA
                                         |   NEW CLASS OPAR argument_expression_list CPAR class_base_clause OBRA CBRA
-                                        |   NEW CLASS OPAR argument_expression_list CPAR class_base_clause OBRA CBRA
-                                        |   NEW CLASS OPAR CPAR class_interface_clause OBRA CBRA
                                         |   NEW CLASS OPAR CPAR class_interface_clause OBRA CBRA
                                     '''
 
@@ -174,7 +171,7 @@ def p_array_initilizer(p):
 
 def p_array_initializer_list(p):
     '''array_initializer_list           :   array_element_initializer
-                                        :   array_element_initializer COMMA array_initializer_list'''
+                                        |   array_element_initializer COMMA array_initializer_list'''
 
 def p_array_element_initializer(p):
     '''array_element_initializer        :   DOLLAR element_value
@@ -500,6 +497,145 @@ def p_require_once_expression(p):
 
 def p_constant_expression(p):
     '''constant_expression              :   expression'''
+
+def p_statement(p):
+    '''statement                        :   compound_statement
+                                        |   named_label_statement
+                                        |   expression_statement
+                                        |   selection_statement
+                                        |   iteration_statement
+                                        |   jump_statement
+                                        |   try_statement
+                                        |   declare_statement
+                                        |   echo_statement
+                                        |   unset_statement
+                                        |   const_declaration
+                                        |   function_definition
+                                        |   class_declaration
+                                        |   interface_declaration
+                                        |   trait_declaration
+                                        |   namespace_definition
+                                        |   global_declaration
+                                        |   function_static_declaration
+                                        '''
+
+def p_compound_statement(p):
+    '''compound_statement               :   OBRA statement_list CBRA
+                                        |   OBRA CBRA'''
+
+def p_statement_list(p): 
+    '''statement_list                   :   statement
+                                        |   statement_list statement'''
+
+def p_named_label_statement(p): 
+    '''named_label_statement            :   STRING COLON'''
+
+def p_expression_statement(p): 
+    '''expression_statement             :   expression ENDLINE
+                                        |   ENDLINE'''
+
+def p_selection_statement(p): 
+    '''selection_statement              :   if_statement
+                                        |   switch_statement'''
+
+def p_if_statement(p):
+    '''if_statement                     :   IF OPAR expression CPAR statement elseif_clauses_1 else_clause_1
+                                        |   IF OPAR expression CPAR statement
+                                        |   IF OPAR expression CPAR statement elseif_clauses_1
+                                        |   IF OPAR expression CPAR statement else_clause_1
+                                        |   IF OPAR expression CPAR COLON statement_list elseif_clauses_2 else_clause_2 ENDIF ENDLINE
+                                        |   IF OPAR expression CPAR COLON statement_list else_clause_2 ENDIF ENDLINE
+                                        |   IF OPAR expression CPAR COLON statement_list elseif_clauses_2 ENDIF ENDLINE
+                                        '''
+
+def p_elseif_clauses_1(p):
+    '''elseif_clauses_1                 :   elseif_clause_1
+                                        |   esleif_clauses_1 elseif_clause_1
+                                        '''
+
+def p_elseif_clause_1(p):
+    '''elseif_clause_1                  :   ELSEIF OPAR expression CPAR statement
+                                        '''
+
+def p_else_clause_1(p):
+    '''else_clause_1                    :   ELSE statement
+                                        '''
+
+def p_elseif_clauses_2(p):
+    '''elseif_clauses_2                 :   elseif_clause_2
+                                        |   esleif_clauses_2 elseif_clause_2
+                                        '''
+
+def p_elseif_clause_2(p):
+    '''elseif_clause_2                  :   ELSEIF OPAR expression CPAR COLON statement_list
+                                        '''
+
+def p_else_clause_2(p):
+    '''else_clause_2                    :   ELSE COLON statement_list
+                                        '''
+
+def p_switch_statement(p):
+    '''switch_statement                 :   SWITCH OPAR expression CPAR OBAR case_statements CBAR
+                                        |   SWITCH OPAR expression CPAR OBAR CBAR
+                                        |   SWITCH OPAR expression CPAR COLON case_statements ENDSWITCH ENDLINE
+                                        '''
+
+def p_case_statements(p):
+    '''case_statements                  :   case_statement case_statements
+                                        |   case_statement
+                                        |   default_statement case_statements
+                                        |   default_statement 
+                                        '''
+
+def p_case_statement(p):
+    '''case_statement                   :   CASE expression case_default_label_terminator statement_list
+                                        |   CASE expression case_default_label_terminator
+                                        '''
+
+def p_default_statement(p):
+    '''default_statement                :   DEFAULT case_default_label_terminator statement_list
+                                        |   DEFAULT case_default_label_terminator
+                                        '''
+
+def p_case_default_label_terminator(p):
+    '''case_default_label_terminator    :   ENDLINE
+                                        |   COLON
+                                        '''
+
+def p_iteration_statement(p):
+    '''iteration_statement              :   while_statement
+                                        |   do_statement
+                                        |   for_statement
+                                        |   foreach_statement
+                                        '''
+
+def p_while_statement(p):
+    '''while_statement                  :   WHILE OPAR expression CPAR statement
+                                        |   WHILE OPAR expression CPAR COLON statement_list ENDWHILE ENDLINE'''
+
+def p_do_statement(p):
+    '''do_statement                     :   DO statement WHILE OPAR expression CPAR ENDLINE'''
+
+def p_for_statement(p):
+    '''for_statement                    :   FOR OPAR for_initializer ENDLINE for_control ENDLINE for_end_of_loop CPAR statement  
+                                        |   FOR OPAR ENDLINE for_control ENDLINE for_end_of_loop CPAR statement 
+                                        |   FOR OPAR ENDLINE ENDLINE for_end_of_loop CPAR statement 
+                                        |   FOR OPAR ENDLINE ENDLINE CPAR statement 
+                                        |   FOR OPAR ENDLINE for_control ENDLINE CPAR statement 
+                                        |   FOR OPAR ENDLINE for_control ENDLINE for_end_of_loop CPAR statement 
+                                        |   FOR OPAR ENDLINE ENDLINE for_end_of_loop CPAR statement 
+                                        |   FOR OPAR for_initializer ENDLINE ENDLINE CPAR statement 
+                                        |   FOR OPAR for_initializer ENDLINE for_control ENDLINE for_end_of_loop CPAR COLON statement_list ENDFOR ENDLINE 
+                                        |   FOR OPAR ENDLINE for_control ENDLINE for_end_of_loop CPAR COLON statement_list ENDFOR ENDLINE 
+                                        |   FOR OPAR ENDLINE ENDLINE for_end_of_loop CPAR COLON statement_list ENDFOR ENDLINE 
+                                        |   FOR OPAR ENDLINE ENDLINE CPAR COLON statement_list ENDFOR ENDLINE 
+                                        |   FOR OPAR ENDLINE for_control ENDLINE CPAR COLON statement_list ENDFOR ENDLINE 
+                                        |   FOR OPAR ENDLINE for_control ENDLINE for_end_of_loop CPAR COLON statement_list ENDFOR ENDLINE 
+                                        |   FOR OPAR ENDLINE ENDLINE for_end_of_loop CPAR COLON statement_list ENDFOR ENDLINE 
+                                        |   FOR OPAR for_initializer ENDLINE ENDLINE CPAR COLON statement_list ENDFOR ENDLINE 
+                                        '''
+
+#CONTINUAR EN FOR INITIALIZER
 
 def p_error(p):
     if VERBOSE:

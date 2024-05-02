@@ -3,53 +3,31 @@ Created by PLY version 3.11 (http://www.dabeaz.com/ply)
 Unused terminals:
 
     ABSTRACT
-    ADD
-    AMPERSAND
-    AND_EQUAL
-    ARRAY
     ARRAY_CAST
     AS
-    ASSIGN
     ATTRIBUTE
-    BOOLEAN_AND
-    BOOLEAN_OR
     BOOL_CAST
     BREAK
     CALLABLE
     CASE
     CATCH
-    CBRA
-    CLASS
     CLASS_C
-    CLONE
-    COALESCE
     COALESCE_EQUAL
-    COMMA
     COMMENT
-    CONCAT
     CONCAT_EQUAL
     CONST
     CONSTANT_ENCAPSED_STRING
     CONTINUE
-    CPAR
-    CURLY_OPEN
-    DEC
     DECLARE
     DEFAULT
     DIR
-    DIV
-    DIV_EQUAL
+    DNUMBER
     DO
     DOC_COMMENT
-    DOLLAR_OPEN_CURLY_BRACES
-    DOUBLE_ARROW
     DOUBLE_CAST
-    DOUBLE_COLON
     ECHO
-    ELLIPSIS
     ELSE
     ELSEIF
-    EMPTY
     ENCAPSED_AND_WHITESPACE
     ENDDECLARE
     ENDFOR
@@ -58,8 +36,6 @@ Unused terminals:
     ENDSWITCH
     ENDWHILE
     ENUM
-    EVAL
-    EXIT
     EXTENDS
     FILE
     FINAL
@@ -67,433 +43,658 @@ Unused terminals:
     FN
     FOR
     FOREACH
-    FUNCTION
     FUNC_C
-    GLOBAL
     GOTO
     HALT_COMPILER
     HEREDOC
     IF
     IMPLEMENTS
-    INC
-    INCLUDE
-    INCLUDE_ONCE
     INSTANCE_OF
     INSTEADOF
     INTERFACE
     INT_CAST
-    ISSET
-    IS_EQUAL
-    IS_GREATER_OR_EQUAL
-    IS_IDENTICAL
-    IS_NOT_EQUAL
-    IS_NOT_IDENTICAL
-    IS_SMALLER_OR_EQUAL
     LINE
-    LIST
     LNUMBER
-    LOGICAL_AND
-    LOGICAL_OR
-    LOGICAL_XOR
     MAP_ITEM
     MATCH
     METHOD_C
-    MINUS_EQUAL
     MUL
     NAMESPACE
     NAME_FULLY_QUALIFIED
     NAME_QUALIFIED
-    NEW
     NS_C
     NS_SEPARATOR
     NULLSAFE_OBJECT_OPERATOR
     NUM_STRING
     OBJECT_CAST
-    OBJECT_OPERATOR
-    OBRA
-    OPAR
-    OR_EQUAL
-    PLUS_EQUAL
-    POW
-    POW_EQUAL
-    PRINT
     PRIVATE
     PROTECTED
     PUBLIC
     READONLY
-    REQUIRE
-    REQUIRE_ONCE
     RETURN
-    SL
-    SL_EQUAL
-    SPACESHIP
-    SR
-    SR_EQUAL
-    STRING
     STRING_CAST
     STRING_VARNAME
-    SUB
     SWITCH
     THROW
     TRAIT
     TRAIT_C
     TRY
-    UNSET
     UNSET_CAST
     USE
     VAR
-    VARIABLE
     WHILE
     WHITESPACE
-    XOR_EQUAL
-    YIELD
-    YIELD_FROM
 
 Grammar
 
 Rule 0     S' -> script
 Rule 1     script -> script_section
 Rule 2     script -> script script_section
-Rule 3     script_section -> start_tag
-Rule 4     script_section -> function_static_declaration
-Rule 5     script_section -> end_tag
-Rule 6     start_tag -> OPEN_TAG
-Rule 7     start_tag -> OPEN_TAG_WITH_ECHO
-Rule 8     end_tag -> CLOSE_TAG
-Rule 9     function_static_declaration -> STATIC static_variable_name_list ENDLINE
-Rule 10    static_variable_name_list -> DNUMBER
+Rule 3     script_section -> start_tag statement_list end_tag
+Rule 4     script_section -> start_tag end_tag
+Rule 5     script_section -> start_tag statement_list
+Rule 6     script_section -> start_tag
+Rule 7     start_tag -> OPEN_TAG
+Rule 8     start_tag -> OPEN_TAG_WITH_ECHO
+Rule 9     end_tag -> CLOSE_TAG
+Rule 10    function_static_declaration -> STATIC static_variable_name_list ENDLINE
+Rule 11    static_variable_name_list -> static_variable_declaration
+Rule 12    static_variable_name_list -> static_variable_name_list COMMA static_variable_declaration
+Rule 13    static_variable_declaration -> VARIABLE function_static_initializer
+Rule 14    static_variable_declaration -> VARIABLE
+Rule 15    function_static_initializer -> ASSIGN constant_expression
+Rule 16    global_declaration -> GLOBAL variable_name_list ENDLINE
+Rule 17    variable_name_list -> simple_variable
+Rule 18    variable_name_list -> variable_name_list COMMA simple_variable
+Rule 19    primary_expression -> variable
+Rule 20    primary_expression -> class_constant_access_expression
+Rule 21    primary_expression -> constant_access_expression
+Rule 22    primary_expression -> literal
+Rule 23    primary_expression -> array_creation_expression
+Rule 24    primary_expression -> intrinsic
+Rule 25    primary_expression -> anonymous_function_creation_expression
+Rule 26    primary_expression -> object_creation_expression
+Rule 27    primary_expression -> postfix_increment_expression
+Rule 28    primary_expression -> postfix_decrement_expression
+Rule 29    primary_expression -> prefix_increment_expression
+Rule 30    primary_expression -> prefix_decrement_expression
+Rule 31    primary_expression -> byref_assignment_expression
+Rule 32    primary_expression -> shell_command_expression
+Rule 33    primary_expression -> OPAR expression CPAR
+Rule 34    simple_variable -> variable_name
+Rule 35    simple_variable -> DOLLAR simple_variable
+Rule 36    simple_variable -> DOLLAR OBRA expression CBRA
+Rule 37    dereferencable_expression -> VARIABLE
+Rule 38    dereferencable_expression -> OBRA expression CBRA
+Rule 39    dereferencable_expression -> array_creation_expression
+Rule 40    dereferencable_expression -> string_literal
+Rule 41    callable_expression -> callable_variable
+Rule 42    callable_expression -> OPAR expression CPAR
+Rule 43    callable_expression -> array_creation_expression
+Rule 44    callable_expression -> string_literal
+Rule 45    callable_variable -> simple_variable
+Rule 46    callable_variable -> subscript_expression
+Rule 47    callable_variable -> member_call_expression
+Rule 48    callable_variable -> scoped_call_expression
+Rule 49    callable_variable -> function_call_expression
+Rule 50    variable -> callable_variable
+Rule 51    variable -> scoped_property_access_expression
+Rule 52    variable -> member_access_expression
+Rule 53    constant_access_expression -> qualified_name
+Rule 54    literal -> integer_literal
+Rule 55    literal -> floating_literal
+Rule 56    literal -> string_literal
+Rule 57    intrinsic -> empty_intrinsic
+Rule 58    intrinsic -> eval_intrinsic
+Rule 59    intrinsic -> exit_intrinsic
+Rule 60    intrinsic -> isset_intrinsic
+Rule 61    empty_intrinsic -> EMPTY OPAR expression CPAR
+Rule 62    eval_intrinsic -> EVAL OPAR expression CPAR
+Rule 63    exit_intrinsic -> EXIT
+Rule 64    exit_intrinsic -> EXIT OPAR expression CPAR
+Rule 65    exit_intrinsic -> DIE
+Rule 66    exit_intrinsic -> DIE OPAR expression CPAR
+Rule 67    isset_intrinsic -> ISSET OPAR variable_list CPAR
+Rule 68    variable_list -> variable
+Rule 69    variable_list -> variable_list COMMA variable
+Rule 70    anonymous_function_creation_expression -> STATIC FUNCTION AMPERSAND OPAR parameter_declaration_list CPAR return_type compund_statement
+Rule 71    anonymous_function_creation_expression -> FUNCTION OPAR CPAR compound_statement
+Rule 72    anonymous_function_creation_expression -> FUNCTION OPAR parameter_declaration_list CPAR return_type compound_statement
+Rule 73    anonymous_function_creation_expression -> FUNCTION AMPERSAND OPAR parameter_declaration_list CPAR return_type compound_statement
+Rule 74    anonymous_function_creation_expression -> STATIC FUNCTION OPAR parameter_declaration_list CPAR return_type compound_statement
+Rule 75    anonymous_function_creation_expression -> STATIC FUNCTION OPAR CPAR return_type compound_statement
+Rule 76    anonymous_function_creation_expression -> STATIC FUNCTION AMPERSAND OPAR parameter_declaration_list CPAR return_type compound_statement
+Rule 77    anonymous_function_creation_expression -> STATIC FUNCTION AMPERSAND OPAR CPAR return_type compound_statement
+Rule 78    object_creation_expression -> NEW class_type_designator OPAR argument_expression_list
+Rule 79    object_creation_expression -> NEW class_type_designator OPAR CPAR
+Rule 80    object_creation_expression -> NEW class_type_designator OPAR argument_expression_list COMMA CPAR
+Rule 81    object_creation_expression -> NEW class_type_designator
+Rule 82    object_creation_expression -> NEW CLASS OPAR argument_expression_list CPAR class_base_clause class_interface_clause OBRA class_member_declaration CBRA
+Rule 83    object_creation_expression -> NEW CLASS OPAR CPAR OBRA CBRA
+Rule 84    object_creation_expression -> NEW CLASS OPAR argument_expression_list CPAR class_base_clause OBRA class_member_declaration CBRA
+Rule 85    object_creation_expression -> NEW CLASS OPAR argument_expression_list CPAR class_interface_clause OBRA class_member_declaration CBRA
+Rule 86    object_creation_expression -> NEW CLASS OPAR argument_expression_list CPAR class_base_clause OBRA CBRA
+Rule 87    object_creation_expression -> NEW CLASS OPAR CPAR class_interface_clause OBRA CBRA
+Rule 88    class_type_designator -> qualified_name
+Rule 89    class_type_designator -> new_variable
+Rule 90    new_variable -> simple_variable
+Rule 91    new_variable -> new_variable OBRACK expression CBRACK
+Rule 92    new_variable -> new_variable OBRACK CBRACK
+Rule 93    new_variable -> new_variable OBRA expression CBRA
+Rule 94    new_variable -> new_variable OBJECT_OPERATOR member_name
+Rule 95    new_variable -> qualified_name DOUBLE_COLON simple_variable
+Rule 96    new_variable -> relative_scope DOUBLE_COLON simple_variable
+Rule 97    new_variable -> new_variable DOUBLE_COLON simple_variable
+Rule 98    array_creation_expression -> ARRAY OBRA array_initializer CBRA
+Rule 99    array_creation_expression -> ARRAY OBRA CBRA
+Rule 100   array_creation_expression -> OBRACK array_initializer CBRACK
+Rule 101   array_creation_expression -> OBRACK CBRACK
+Rule 102   array_initializer -> array_initializer_list COMMA
+Rule 103   array_initializer -> array_initializer_list
+Rule 104   array_initializer_list -> array_element_initializer
+Rule 105   array_initializer_list -> array_element_initializer COMMA array_initializer_list
+Rule 106   array_element_initializer -> DOLLAR element_value
+Rule 107   array_element_initializer -> element_value
+Rule 108   array_element_initializer -> element_key DOUBLE_ARROW DOLLAR element_value
+Rule 109   array_element_initializer -> element_key DOUBLE_ARROW element_value
+Rule 110   element_key -> expression
+Rule 111   element_value -> expression
+Rule 112   subscript_expression -> dereferencable_expression OBRACK expression CBRACK
+Rule 113   subscript_expression -> dereferencable_expression OBRACK CBRACK
+Rule 114   subscript_expression -> dereferencable_expression OBRA expression CBRA
+Rule 115   function_call_expression -> qualified_name OPAR argument_expression_list CPAR
+Rule 116   function_call_expression -> qualified_name OPAR CPAR
+Rule 117   function_call_expression -> qualified_name OPAR argument_expression_list COMMA CPAR
+Rule 118   function_call_expression -> callable_expression OPAR argument_expression_list CPAR
+Rule 119   function_call_expression -> callable_expression OPAR CPAR
+Rule 120   function_call_expression -> callable_expression OPAR argument_expression_list COMMA CPAR
+Rule 121   argument_expression_list -> argument_expression
+Rule 122   argument_expression_list -> argument_expression_list COMMA argument_expression
+Rule 123   argument_expression -> variadic_unpacking
+Rule 124   argument_expression -> expression
+Rule 125   variadic_unpacking -> ELLIPSIS expression
+Rule 126   member_access_expression -> dereferencable_expression OBJECT_OPERATOR member_name
+Rule 127   member_name -> STRING
+Rule 128   member_name -> simple_variable
+Rule 129   member_name -> OBRA expression CBRA
+Rule 130   member_call_expression -> dereferencable_expression OBJECT_OPERATOR member_name OPAR argument_expression_list CPAR
+Rule 131   member_call_expression -> dereferencable_expression OBJECT_OPERATOR member_name OPAR CPAR
+Rule 132   member_call_expression -> dereferencable_expression OBJECT_OPERATOR member_name OPAR argument_expression_list COMMA CPAR
+Rule 133   postfix_increment_expression -> variable INC
+Rule 134   postfix_increment_expression -> variable DEC
+Rule 135   prefix_increment_expression -> INC variable
+Rule 136   prefix_decrement_expression -> DEC variable
+Rule 137   shell_command_expression -> BACKQUOTE TEXT BACKQUOTE
+Rule 138   scoped_property_access_expression -> scope_resolution_qualifier DOUBLE_COLON simple_variable
+Rule 139   scoped_call_expression -> scope_resolution_qualifier DOUBLE_COLON member_name OPAR argument_expression_list CPAR
+Rule 140   scoped_call_expression -> scope_resolution_qualifier DOUBLE_COLON member_name OPAR CPAR
+Rule 141   scoped_call_expression -> scope_resolution_qualifier DOUBLE_COLON member_name OPAR argument_expression_list COMMA CPAR
+Rule 142   class_constant_access_expression -> scope_resolution_qualifier DOUBLE_COLON STRING
+Rule 143   scope_resolution_qualifier -> relative_scope
+Rule 144   scope_resolution_qualifier -> qualified_name
+Rule 145   scope_resolution_qualifier -> dereferencable_expression
+Rule 146   relative_scope -> SELF
+Rule 147   relative_scope -> PARENT
+Rule 148   relative_scope -> STATIC
+Rule 149   clone_expression -> primary_expression
+Rule 150   clone_expression -> CLONE primary_expression
+Rule 151   exponentiation_expression -> clone_expression
+Rule 152   exponentiation_expression -> clone_expression POW exponentiation_expression
+Rule 153   unary_expression -> exponentiation_expression
+Rule 154   unary_expression -> unary_op_expression
+Rule 155   unary_expression -> error_control_expression
+Rule 156   unary_expression -> cast_expression
+Rule 157   unary_op_expression -> ADD
+Rule 158   unary_op_expression -> SUB
+Rule 159   unary_op_expression -> NEG
+Rule 160   error_control_expression -> AT unary_expression
+Rule 161   cast_expression -> OPAR cast_type CPAR unary_expression
+Rule 162   cast_type -> ARRAY
+Rule 163   cast_type -> BINARY
+Rule 164   cast_type -> BOOL
+Rule 165   cast_type -> BOOLEAN
+Rule 166   cast_type -> DOUBLE
+Rule 167   cast_type -> INT
+Rule 168   cast_type -> INTEGER
+Rule 169   cast_type -> FLOAT
+Rule 170   cast_type -> OBJECT
+Rule 171   cast_type -> REAL
+Rule 172   cast_type -> STRINGKW
+Rule 173   cast_type -> UNSET
+Rule 174   instanceof_expression -> unary_expression
+Rule 175   instanceof_expression -> instanceof_subject INSTANCEOF class_type_designator
+Rule 176   instanceof_subject -> instanceof_expression
+Rule 177   logical_not_expression -> instanceof_expression
+Rule 178   logical_not_expression -> NOT instanceof_expression
+Rule 179   multiplicative_expression -> logical_not_expression
+Rule 180   multiplicative_expression -> multiplicative_expression MULT logical_not_expression
+Rule 181   multiplicative_expression -> multiplicative_expression DIV logical_not_expression
+Rule 182   multiplicative_expression -> multiplicative_expression MOD logical_not_expression
+Rule 183   additive_expression -> multiplicative_expression
+Rule 184   additive_expression -> additive_expression ADD multiplicative_expression
+Rule 185   additive_expression -> additive_expression SUB multiplicative_expression
+Rule 186   additive_expression -> additive_expression CONCAT multiplicative_expression
+Rule 187   shift_expression -> additive_expression
+Rule 188   shift_expression -> shift_expression SR additive_expression
+Rule 189   shift_expression -> shift_expression SL additive_expression
+Rule 190   relational_expression -> shift_expression
+Rule 191   relational_expression -> relational_expression LT shift_expression
+Rule 192   relational_expression -> relational_expression GT shift_expression
+Rule 193   relational_expression -> relational_expression IS_SMALLER_OR_EQUAL shift_expression
+Rule 194   relational_expression -> relational_expression IS_GREATER_OR_EQUAL shift_expression
+Rule 195   relational_expression -> relational_expression SPACESHIP shift_expression
+Rule 196   equality_expression -> relational_expression
+Rule 197   equality_expression -> equality_expression IS_EQUAL relational_expression
+Rule 198   equality_expression -> equality_expression IS_NOT_EQUAL relational_expression
+Rule 199   equality_expression -> equality_expression IS_IDENTICAL relational_expression
+Rule 200   equality_expression -> equality_expression IS_NOT_IDENTICAL relational_expression
+Rule 201   bitwise_AND_expression -> equality_expression
+Rule 202   bitwise_AND_expression -> bitwise_AND_expression AMPERSAND equality_expression
+Rule 203   bitwise_exc_OR_expression -> bitwise_AND_expression
+Rule 204   bitwise_exc_OR_expression -> bitwise_exc_OR_expression BITWISE_XOR bitwise_AND_expression
+Rule 205   bitwise_inc_OR_expression -> bitwise_exc_OR_expression
+Rule 206   bitwise_inc_OR_expression -> bitwise_inc_OR_expression BITWISE_OR bitwise_exc_OR_expression
+Rule 207   logical_AND_expression_1 -> bitwise_inc_OR_expression
+Rule 208   logical_AND_expression_1 -> logical_AND_expression_1 BOOLEAN_AND bitwise_inc_OR_expression
+Rule 209   logical_inc_OR_expression_1 -> logical_AND_expression_1
+Rule 210   logical_inc_OR_expression_1 -> logical_inc_OR_expression_1 BOOLEAN_OR logical_AND_expression_1
+Rule 211   coalesce_expression -> logical_inc_OR_expression_1
+Rule 212   coalesce_expression -> logical_inc_OR_expression_1 COALESCE coalesce_expression
+Rule 213   conditional_expression -> coalesce_expression
+Rule 214   conditional_expression -> conditional_expression CONDITIONAL expression COLON coalesce_expression
+Rule 215   conditional_expression -> conditional_expression CONDITIONAL COLON coalesce_expression
+Rule 216   assignment_expression -> conditional_expression
+Rule 217   assignment_expression -> simple_assignment_expression
+Rule 218   assignment_expression -> compound_assignment_expression
+Rule 219   simple_assignment_expression -> variable ASSIGN assignment_expression
+Rule 220   simple_assignment_expression -> list_intrinsic ASSIGN assignment_expression
+Rule 221   simple_assignment_expression -> LIST OPAR list_expression_list CPAR
+Rule 222   list_expression_list -> unkeyed_list_expression_list
+Rule 223   list_expression_list -> keyed_list_expression_list COMMA
+Rule 224   list_expression_list -> keyed_list_expression_list
+Rule 225   unkeyed_list_expression_list -> list_or_variable
+Rule 226   unkeyed_list_expression_list -> COMMA
+Rule 227   unkeyed_list_expression_list -> unkeyed_list_expression_list COMMA list_or_variable
+Rule 228   unkeyed_list_expression_list -> unkeyed_list_expression_list COMMA
+Rule 229   keyed_list_expression_list -> expression DOUBLE_ARROW list_or_variable
+Rule 230   keyed_list_expression_list -> COMMA
+Rule 231   keyed_list_expression_list -> keyed_list_expression_list COMMA expression DOUBLE_ARROW list_or_variable
+Rule 232   list_or_variable -> list_intrinsic
+Rule 233   list_or_variable -> variable
+Rule 234   list_or_variable -> DOLLAR variable
+Rule 235   byref_assignment_expression -> variable ASSIGN AMPERSAND variable
+Rule 236   compount_assignment_expression -> variable compund_assignment_operator assignment_expression
+Rule 237   compount_assignment_operator -> POW_EQUAL
+Rule 238   compount_assignment_operator -> MUL_EQUAL
+Rule 239   compount_assignment_operator -> DIV_EQUAL
+Rule 240   compount_assignment_operator -> MOD_EQUAL
+Rule 241   compount_assignment_operator -> PLUS_EQUAL
+Rule 242   compount_assignment_operator -> MINUS_EQUAL
+Rule 243   compount_assignment_operator -> SL_EQUAL
+Rule 244   compount_assignment_operator -> SR_EQUAL
+Rule 245   compount_assignment_operator -> AND_EQUAL
+Rule 246   compount_assignment_operator -> XOR_EQUAL
+Rule 247   compount_assignment_operator -> OR_EQUAL
+Rule 248   yield_from_expression -> YIELD_FROM assigment_expression
+Rule 249   yield_expression -> YIELD
+Rule 250   yield_expression -> yield_from_expression
+Rule 251   yield_expression -> YIELD yield_expression
+Rule 252   yield_expression -> YIELD yield_from_expression DOUBLE_ARROW yield_expression
+Rule 253   print_expression -> yield_expression
+Rule 254   print_expression -> PRINT print_expression
+Rule 255   logical_AND_expression_2 -> print_expression
+Rule 256   logical_AND_expression_2 -> logical_AND_expression_2 LOGICAL_AND yield_expression
+Rule 257   logical_exc_OR_expression -> logical_AND_expression_2
+Rule 258   logical_exc_OR_expression -> logical_exc_OR_expression LOGICAL_XOR LOGICAL_AND_expression_2
+Rule 259   logical_inc_OR_expression_2 -> logical_exc_OR_expression
+Rule 260   logical_inc_OR_expression_2 -> logical_inc_OR_expression_2 LOGICAL_OR LOGICAL_exc_OR_expression_2
+Rule 261   expression -> logical_inc_OR_expression_2
+Rule 262   expression -> include_expression
+Rule 263   expression -> include_once_expression
+Rule 264   expression -> require_expression
+Rule 265   expression -> require_once_expression
+Rule 266   include_expression -> INCLUDE expression
+Rule 267   include_expression -> INCLUDE_ONCE expression
+Rule 268   require_expression -> REQUIRE expression
+Rule 269   require_expression -> REQUIRE_ONCE expression
+Rule 270   constant_expression -> expression
+Rule 271   statement -> compound_statement
+Rule 272   statement -> named_label_statement
+Rule 273   statement -> expression_statement
+Rule 274   statement -> selection_statement
+Rule 275   statement -> iteration_statement
+Rule 276   statement -> jump_statement
+Rule 277   statement -> try_statement
+Rule 278   statement -> declare_statement
+Rule 279   statement -> echo_statement
+Rule 280   statement -> unset_statement
+Rule 281   statement -> const_declaration
+Rule 282   statement -> function_definition
+Rule 283   statement -> class_declaration
+Rule 284   statement -> interface_declaration
+Rule 285   statement -> trait_declaration
+Rule 286   statement -> namespace_definition
+Rule 287   statement -> global_declaration
+Rule 288   statement -> function_static_declaration
+Rule 289   compound_statement -> OBRA statement_list CBRA
+Rule 290   compound_statement -> OBRA CBRA
 
 Terminals, with rules where they appear
 
 ABSTRACT             : 
-ADD                  : 
-AMPERSAND            : 
-AND_EQUAL            : 
-ARRAY                : 
+ADD                  : 157 184
+AMPERSAND            : 70 73 76 77 202 235
+AND_EQUAL            : 245
+ARRAY                : 98 99 162
 ARRAY_CAST           : 
 AS                   : 
-ASSIGN               : 
+ASSIGN               : 15 219 220 235
+AT                   : 160
 ATTRIBUTE            : 
-BOOLEAN_AND          : 
-BOOLEAN_OR           : 
+BACKQUOTE            : 137 137
+BINARY               : 163
+BITWISE_OR           : 206
+BITWISE_XOR          : 204
+BOOL                 : 164
+BOOLEAN              : 165
+BOOLEAN_AND          : 208
+BOOLEAN_OR           : 210
 BOOL_CAST            : 
 BREAK                : 
 CALLABLE             : 
 CASE                 : 
 CATCH                : 
-CBRA                 : 
-CLASS                : 
+CBRA                 : 36 38 82 83 84 85 86 87 93 98 99 114 129 289 290
+CBRACK               : 91 92 100 101 112 113
+CLASS                : 82 83 84 85 86 87
 CLASS_C              : 
-CLONE                : 
-CLOSE_TAG            : 8
-COALESCE             : 
+CLONE                : 150
+CLOSE_TAG            : 9
+COALESCE             : 212
 COALESCE_EQUAL       : 
-COMMA                : 
+COLON                : 214 215
+COMMA                : 12 18 69 80 102 105 117 120 122 132 141 223 226 227 228 230 231
 COMMENT              : 
-CONCAT               : 
+CONCAT               : 186
 CONCAT_EQUAL         : 
+CONDITIONAL          : 214 215
 CONST                : 
 CONSTANT_ENCAPSED_STRING : 
 CONTINUE             : 
-CPAR                 : 
-CURLY_OPEN           : 
-DEC                  : 
+CPAR                 : 33 42 61 62 64 66 67 70 71 72 73 74 75 76 77 79 80 82 83 84 85 86 87 115 116 117 118 119 120 130 131 132 139 140 141 161 221
+DEC                  : 134 136
 DECLARE              : 
 DEFAULT              : 
 DIR                  : 
-DIV                  : 
-DIV_EQUAL            : 
-DNUMBER              : 10
+DIV                  : 181
+DIV_EQUAL            : 239
+DNUMBER              : 
 DO                   : 
 DOC_COMMENT          : 
-DOLLAR_OPEN_CURLY_BRACES : 
-DOUBLE_ARROW         : 
+DOLLAR               : 35 36 106 108 234
+DOUBLE               : 166
+DOUBLE_ARROW         : 108 109 229 231 252
 DOUBLE_CAST          : 
-DOUBLE_COLON         : 
+DOUBLE_COLON         : 95 96 97 138 139 140 141 142
 ECHO                 : 
-ELLIPSIS             : 
+ELLIPSIS             : 125
 ELSE                 : 
 ELSEIF               : 
-EMPTY                : 
+EMPTY                : 61
 ENCAPSED_AND_WHITESPACE : 
 ENDDECLARE           : 
 ENDFOR               : 
 ENDFOREACH           : 
 ENDIF                : 
-ENDLINE              : 9
+ENDLINE              : 10 16
 ENDSWITCH            : 
 ENDWHILE             : 
 ENUM                 : 
-EVAL                 : 
-EXIT                 : 
+EVAL                 : 62
+EXIT                 : 63 64
 EXTENDS              : 
 FILE                 : 
 FINAL                : 
 FINALLY              : 
+FLOAT                : 169
 FN                   : 
 FOR                  : 
 FOREACH              : 
-FUNCTION             : 
+FUNCTION             : 70 71 72 73 74 75 76 77
 FUNC_C               : 
-GLOBAL               : 
+GLOBAL               : 16
 GOTO                 : 
+GT                   : 192
 HALT_COMPILER        : 
 HEREDOC              : 
 IF                   : 
 IMPLEMENTS           : 
-INC                  : 
-INCLUDE              : 
-INCLUDE_ONCE         : 
+INC                  : 133 135
+INCLUDE              : 266
+INCLUDE_ONCE         : 267
 INSTANCE_OF          : 
 INSTEADOF            : 
+INT                  : 167
+INTEGER              : 168
 INTERFACE            : 
 INT_CAST             : 
-ISSET                : 
-IS_EQUAL             : 
-IS_GREATER_OR_EQUAL  : 
-IS_IDENTICAL         : 
-IS_NOT_EQUAL         : 
-IS_NOT_IDENTICAL     : 
-IS_SMALLER_OR_EQUAL  : 
+ISSET                : 67
+IS_EQUAL             : 197
+IS_GREATER_OR_EQUAL  : 194
+IS_IDENTICAL         : 199
+IS_NOT_EQUAL         : 198
+IS_NOT_IDENTICAL     : 200
+IS_SMALLER_OR_EQUAL  : 193
 LINE                 : 
-LIST                 : 
+LIST                 : 221
 LNUMBER              : 
-LOGICAL_AND          : 
-LOGICAL_OR           : 
-LOGICAL_XOR          : 
+LOGICAL_AND          : 256
+LOGICAL_OR           : 260
+LOGICAL_XOR          : 258
+LT                   : 191
 MAP_ITEM             : 
 MATCH                : 
 METHOD_C             : 
-MINUS_EQUAL          : 
+MINUS_EQUAL          : 242
+MOD                  : 182
 MUL                  : 
 NAMESPACE            : 
 NAME_FULLY_QUALIFIED : 
 NAME_QUALIFIED       : 
-NEW                  : 
+NEG                  : 159
+NEW                  : 78 79 80 81 82 83 84 85 86 87
+NOT                  : 178
 NS_C                 : 
 NS_SEPARATOR         : 
 NULLSAFE_OBJECT_OPERATOR : 
 NUM_STRING           : 
+OBJECT               : 170
 OBJECT_CAST          : 
-OBJECT_OPERATOR      : 
-OBRA                 : 
-OPAR                 : 
-OPEN_TAG             : 6
-OPEN_TAG_WITH_ECHO   : 7
-OR_EQUAL             : 
-PLUS_EQUAL           : 
-POW                  : 
-POW_EQUAL            : 
-PRINT                : 
+OBJECT_OPERATOR      : 94 126 130 131 132
+OBRA                 : 36 38 82 83 84 85 86 87 93 98 99 114 129 289 290
+OBRACK               : 91 92 100 101 112 113
+OPAR                 : 33 42 61 62 64 66 67 70 71 72 73 74 75 76 77 78 79 80 82 83 84 85 86 87 115 116 117 118 119 120 130 131 132 139 140 141 161 221
+OPEN_TAG             : 7
+OPEN_TAG_WITH_ECHO   : 8
+OR_EQUAL             : 247
+PARENT               : 147
+PLUS_EQUAL           : 241
+POW                  : 152
+POW_EQUAL            : 237
+PRINT                : 254
 PRIVATE              : 
 PROTECTED            : 
 PUBLIC               : 
 READONLY             : 
-REQUIRE              : 
-REQUIRE_ONCE         : 
+REAL                 : 171
+REQUIRE              : 268
+REQUIRE_ONCE         : 269
 RETURN               : 
-SL                   : 
-SL_EQUAL             : 
-SPACESHIP            : 
-SR                   : 
-SR_EQUAL             : 
-STATIC               : 9
-STRING               : 
+SELF                 : 146
+SL                   : 189
+SL_EQUAL             : 243
+SPACESHIP            : 195
+SR                   : 188
+SR_EQUAL             : 244
+STATIC               : 10 70 74 75 76 77 148
+STRING               : 127 142
+STRINGKW             : 172
 STRING_CAST          : 
 STRING_VARNAME       : 
-SUB                  : 
+SUB                  : 158 185
 SWITCH               : 
 THROW                : 
 TRAIT                : 
 TRAIT_C              : 
 TRY                  : 
-UNSET                : 
+UNSET                : 173
 UNSET_CAST           : 
 USE                  : 
 VAR                  : 
-VARIABLE             : 
+VARIABLE             : 13 14 37
 WHILE                : 
 WHITESPACE           : 
-XOR_EQUAL            : 
-YIELD                : 
-YIELD_FROM           : 
+XOR_EQUAL            : 246
+YIELD                : 249 251 252
+YIELD_FROM           : 248
 error                : 
 
 Nonterminals, with rules where they appear
 
-end_tag              : 5
-function_static_declaration : 4
+DIE                  : 65 66
+INSTANCEOF           : 175
+LOGICAL_AND_expression_2 : 258
+LOGICAL_exc_OR_expression_2 : 260
+MOD_EQUAL            : 240
+MULT                 : 180
+MUL_EQUAL            : 238
+TEXT                 : 137
+additive_expression  : 184 185 186 187 188 189
+anonymous_function_creation_expression : 25
+argument_expression  : 121 122
+argument_expression_list : 78 80 82 84 85 86 115 117 118 120 122 130 132 139 141
+array_creation_expression : 23 39 43
+array_element_initializer : 104 105
+array_initializer    : 98 100
+array_initializer_list : 102 103 105
+assigment_expression : 248
+assignment_expression : 219 220 236
+bitwise_AND_expression : 202 203 204
+bitwise_exc_OR_expression : 204 205 206
+bitwise_inc_OR_expression : 206 207 208
+byref_assignment_expression : 31
+callable_expression  : 118 119 120
+callable_variable    : 41 50
+cast_expression      : 156
+cast_type            : 161
+class_base_clause    : 82 84 86
+class_constant_access_expression : 20
+class_declaration    : 283
+class_interface_clause : 82 85 87
+class_member_declaration : 82 84 85
+class_type_designator : 78 79 80 81 175
+clone_expression     : 151 152
+coalesce_expression  : 212 213 214 215
+compound_assignment_expression : 218
+compound_statement   : 71 72 73 74 75 76 77 271
+compount_assignment_expression : 
+compount_assignment_operator : 
+compund_assignment_operator : 236
+compund_statement    : 70
+conditional_expression : 214 215 216
+const_declaration    : 281
+constant_access_expression : 21
+constant_expression  : 15
+declare_statement    : 278
+dereferencable_expression : 112 113 114 126 130 131 132 145
+echo_statement       : 279
+element_key          : 108 109
+element_value        : 106 107 108 109
+empty_intrinsic      : 57
+end_tag              : 3 4
+equality_expression  : 197 198 199 200 201 202
+error_control_expression : 155
+eval_intrinsic       : 58
+exit_intrinsic       : 59
+exponentiation_expression : 152 153
+expression           : 33 36 38 42 61 62 64 66 91 93 110 111 112 114 124 125 129 214 229 231 266 267 268 269 270
+expression_statement : 273
+floating_literal     : 55
+function_call_expression : 49
+function_definition  : 282
+function_static_declaration : 288
+function_static_initializer : 13
+global_declaration   : 287
+include_expression   : 262
+include_once_expression : 263
+instanceof_expression : 176 177 178
+instanceof_subject   : 175
+integer_literal      : 54
+interface_declaration : 284
+intrinsic            : 24
+isset_intrinsic      : 60
+iteration_statement  : 275
+jump_statement       : 276
+keyed_list_expression_list : 223 224 231
+list_expression_list : 221
+list_intrinsic       : 220 232
+list_or_variable     : 225 227 229 231
+literal              : 22
+logical_AND_expression_1 : 208 209 210
+logical_AND_expression_2 : 256 257
+logical_exc_OR_expression : 258 259
+logical_inc_OR_expression_1 : 210 211 212
+logical_inc_OR_expression_2 : 260 261
+logical_not_expression : 179 180 181 182
+member_access_expression : 52
+member_call_expression : 47
+member_name          : 94 126 130 131 132 139 140 141
+multiplicative_expression : 180 181 182 183 184 185 186
+named_label_statement : 272
+namespace_definition : 286
+new_variable         : 89 91 92 93 94 97
+object_creation_expression : 26
+parameter_declaration_list : 70 72 73 74 76
+postfix_decrement_expression : 28
+postfix_increment_expression : 27
+prefix_decrement_expression : 30
+prefix_increment_expression : 29
+primary_expression   : 149 150
+print_expression     : 254 255
+qualified_name       : 53 88 95 115 116 117 144
+relational_expression : 191 192 193 194 195 196 197 198 199 200
+relative_scope       : 96 143
+require_expression   : 264
+require_once_expression : 265
+return_type          : 70 72 73 74 75 76 77
+scope_resolution_qualifier : 138 139 140 141 142
+scoped_call_expression : 48
+scoped_property_access_expression : 51
 script               : 2 0
 script_section       : 1 2
-start_tag            : 3
-static_variable_name_list : 9
-
-Parsing method: LALR
-
-state 0
-
-    (0) S' -> . script
-    (1) script -> . script_section
-    (2) script -> . script script_section
-    (3) script_section -> . start_tag
-    (4) script_section -> . function_static_declaration
-    (5) script_section -> . end_tag
-    (6) start_tag -> . OPEN_TAG
-    (7) start_tag -> . OPEN_TAG_WITH_ECHO
-    (9) function_static_declaration -> . STATIC static_variable_name_list ENDLINE
-    (8) end_tag -> . CLOSE_TAG
-
-    OPEN_TAG        shift and go to state 6
-    OPEN_TAG_WITH_ECHO shift and go to state 7
-    STATIC          shift and go to state 8
-    CLOSE_TAG       shift and go to state 9
-
-    script                         shift and go to state 1
-    script_section                 shift and go to state 2
-    start_tag                      shift and go to state 3
-    function_static_declaration    shift and go to state 4
-    end_tag                        shift and go to state 5
-
-state 1
-
-    (0) S' -> script .
-    (2) script -> script . script_section
-    (3) script_section -> . start_tag
-    (4) script_section -> . function_static_declaration
-    (5) script_section -> . end_tag
-    (6) start_tag -> . OPEN_TAG
-    (7) start_tag -> . OPEN_TAG_WITH_ECHO
-    (9) function_static_declaration -> . STATIC static_variable_name_list ENDLINE
-    (8) end_tag -> . CLOSE_TAG
-
-    OPEN_TAG        shift and go to state 6
-    OPEN_TAG_WITH_ECHO shift and go to state 7
-    STATIC          shift and go to state 8
-    CLOSE_TAG       shift and go to state 9
-
-    script_section                 shift and go to state 10
-    start_tag                      shift and go to state 3
-    function_static_declaration    shift and go to state 4
-    end_tag                        shift and go to state 5
-
-state 2
-
-    (1) script -> script_section .
-
-    OPEN_TAG        reduce using rule 1 (script -> script_section .)
-    OPEN_TAG_WITH_ECHO reduce using rule 1 (script -> script_section .)
-    STATIC          reduce using rule 1 (script -> script_section .)
-    CLOSE_TAG       reduce using rule 1 (script -> script_section .)
-    $end            reduce using rule 1 (script -> script_section .)
-
-
-state 3
-
-    (3) script_section -> start_tag .
-
-    OPEN_TAG        reduce using rule 3 (script_section -> start_tag .)
-    OPEN_TAG_WITH_ECHO reduce using rule 3 (script_section -> start_tag .)
-    STATIC          reduce using rule 3 (script_section -> start_tag .)
-    CLOSE_TAG       reduce using rule 3 (script_section -> start_tag .)
-    $end            reduce using rule 3 (script_section -> start_tag .)
-
-
-state 4
-
-    (4) script_section -> function_static_declaration .
-
-    OPEN_TAG        reduce using rule 4 (script_section -> function_static_declaration .)
-    OPEN_TAG_WITH_ECHO reduce using rule 4 (script_section -> function_static_declaration .)
-    STATIC          reduce using rule 4 (script_section -> function_static_declaration .)
-    CLOSE_TAG       reduce using rule 4 (script_section -> function_static_declaration .)
-    $end            reduce using rule 4 (script_section -> function_static_declaration .)
-
-
-state 5
-
-    (5) script_section -> end_tag .
-
-    OPEN_TAG        reduce using rule 5 (script_section -> end_tag .)
-    OPEN_TAG_WITH_ECHO reduce using rule 5 (script_section -> end_tag .)
-    STATIC          reduce using rule 5 (script_section -> end_tag .)
-    CLOSE_TAG       reduce using rule 5 (script_section -> end_tag .)
-    $end            reduce using rule 5 (script_section -> end_tag .)
-
-
-state 6
-
-    (6) start_tag -> OPEN_TAG .
-
-    OPEN_TAG        reduce using rule 6 (start_tag -> OPEN_TAG .)
-    OPEN_TAG_WITH_ECHO reduce using rule 6 (start_tag -> OPEN_TAG .)
-    STATIC          reduce using rule 6 (start_tag -> OPEN_TAG .)
-    CLOSE_TAG       reduce using rule 6 (start_tag -> OPEN_TAG .)
-    $end            reduce using rule 6 (start_tag -> OPEN_TAG .)
-
-
-state 7
-
-    (7) start_tag -> OPEN_TAG_WITH_ECHO .
-
-    OPEN_TAG        reduce using rule 7 (start_tag -> OPEN_TAG_WITH_ECHO .)
-    OPEN_TAG_WITH_ECHO reduce using rule 7 (start_tag -> OPEN_TAG_WITH_ECHO .)
-    STATIC          reduce using rule 7 (start_tag -> OPEN_TAG_WITH_ECHO .)
-    CLOSE_TAG       reduce using rule 7 (start_tag -> OPEN_TAG_WITH_ECHO .)
-    $end            reduce using rule 7 (start_tag -> OPEN_TAG_WITH_ECHO .)
-
-
-state 8
-
-    (9) function_static_declaration -> STATIC . static_variable_name_list ENDLINE
-    (10) static_variable_name_list -> . DNUMBER
-
-    DNUMBER         shift and go to state 12
-
-    static_variable_name_list      shift and go to state 11
-
-state 9
-
-    (8) end_tag -> CLOSE_TAG .
-
-    OPEN_TAG        reduce using rule 8 (end_tag -> CLOSE_TAG .)
-    OPEN_TAG_WITH_ECHO reduce using rule 8 (end_tag -> CLOSE_TAG .)
-    STATIC          reduce using rule 8 (end_tag -> CLOSE_TAG .)
-    CLOSE_TAG       reduce using rule 8 (end_tag -> CLOSE_TAG .)
-    $end            reduce using rule 8 (end_tag -> CLOSE_TAG .)
-
-
-state 10
-
-    (2) script -> script script_section .
-
-    OPEN_TAG        reduce using rule 2 (script -> script script_section .)
-    OPEN_TAG_WITH_ECHO reduce using rule 2 (script -> script script_section .)
-    STATIC          reduce using rule 2 (script -> script script_section .)
-    CLOSE_TAG       reduce using rule 2 (script -> script script_section .)
-    $end            reduce using rule 2 (script -> script script_section .)
-
-
-state 11
-
-    (9) function_static_declaration -> STATIC static_variable_name_list . ENDLINE
-
-    ENDLINE         shift and go to state 13
-
-
-state 12
-
-    (10) static_variable_name_list -> DNUMBER .
-
-    ENDLINE         reduce using rule 10 (static_variable_name_list -> DNUMBER .)
-
-
-state 13
-
-    (9) function_static_declaration -> STATIC static_variable_name_list ENDLINE .
-
-    OPEN_TAG        reduce using rule 9 (function_static_declaration -> STATIC static_variable_name_list ENDLINE .)
-    OPEN_TAG_WITH_ECHO reduce using rule 9 (function_static_declaration -> STATIC static_variable_name_list ENDLINE .)
-    STATIC          reduce using rule 9 (function_static_declaration -> STATIC static_variable_name_list ENDLINE .)
-    CLOSE_TAG       reduce using rule 9 (function_static_declaration -> STATIC static_variable_name_list ENDLINE .)
-    $end            reduce using rule 9 (function_static_declaration -> STATIC static_variable_name_list ENDLINE .)
+selection_statement  : 274
+shell_command_expression : 32
+shift_expression     : 188 189 190 191 192 193 194 195
+simple_assignment_expression : 217
+simple_variable      : 17 18 35 45 90 95 96 97 128 138
+start_tag            : 3 4 5 6
+statement            : 
+statement_list       : 3 5 289
+static_variable_declaration : 11 12
+static_variable_name_list : 10 12
+string_literal       : 40 44 56
+subscript_expression : 46
+trait_declaration    : 285
+try_statement        : 277
+unary_expression     : 160 161 174
+unary_op_expression  : 154
+unkeyed_list_expression_list : 222 227 228
+unset_statement      : 280
+variable             : 19 68 69 133 134 135 136 219 233 234 235 235 236
+variable_list        : 67 69
+variable_name        : 34
+variable_name_list   : 16 18
+variadic_unpacking   : 123
+yield_expression     : 251 252 253 256
+yield_from_expression : 250 252
 

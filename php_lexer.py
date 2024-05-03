@@ -6,23 +6,23 @@ tokens = (
     'AMPERSAND',
     'AND_EQUAL',
     'ARRAY',
-    'ARRAY_CAST',
+    # 'ARRAY_CAST',
     'AS',
-    'ATTRIBUTE',
+    # 'ATTRIBUTE',
     'BOOLEAN_AND',
     'BOOLEAN_OR',
-    'BOOL_CAST',
+    # 'BOOL_CAST',
     'BREAK',
     'CALLABLE',
     'CASE',
     'CATCH',
     'CLASS',
-    'CLASS_C',
+    # 'CLASS_C',
     'CLONE',
     'CLOSE_TAG',
     'COALESCE',
-    'COALESCE_EQUAL',
-    'COMMENT',
+    # 'COALESCE_EQUAL',
+    # 'COMMENT',
     'CONCAT_EQUAL',
     'CONST',
     'CONSTANT_ENCAPSED_STRING',
@@ -31,42 +31,42 @@ tokens = (
     'DEC',
     'DECLARE',
     'DEFAULT',
-    'DIR',
+    # 'DIR',
     'DIV_EQUAL',
     'DNUMBER',
     'DO',
-    'DOC_COMMENT',
+    # 'DOC_COMMENT',
     # 'DOLLAR_OPEN_CURLY_BRACES',
     'DOUBLE_ARROW',
-    'DOUBLE_CAST',
+    # 'DOUBLE_CAST',
     'DOUBLE_COLON',
     'ECHO',
     'ELLIPSIS',
     'ELSE',
     'ELSEIF',
     'EMPTY',
-    'ENCAPSED_AND_WHITESPACE',
+    # 'ENCAPSED_AND_WHITESPACE',
     'ENDDECLARE',
     'ENDFOR',
     'ENDFOREACH',
     'ENDIF',
     'ENDSWITCH',
     'ENDWHILE',
-    'ENUM',
+    # 'ENUM',
     'EVAL',
     'EXIT',
     'EXTENDS',
-    'FILE',
+    # 'FILE',
     'FINAL',
     'FINALLY',
-    'FN',
+    # 'FN',
     'FOR',
     'FOREACH',
     'FUNCTION',
-    'FUNC_C',
+    # 'FUNC_C',
     'GLOBAL',
     'GOTO',
-    'HALT_COMPILER',
+    # 'HALT_COMPILER',
     'IF',
     'IMPLEMENTS',
     'INC',
@@ -75,7 +75,7 @@ tokens = (
     'INSTANCE_OF',
     'INSTEADOF',
     'INTERFACE',
-    'INT_CAST',
+    # 'INT_CAST',
     'ISSET',
     'IS_EQUAL',
     'IS_GREATER_OR_EQUAL',
@@ -83,25 +83,28 @@ tokens = (
     'IS_NOT_EQUAL',
     'IS_NOT_IDENTICAL',
     'IS_SMALLER_OR_EQUAL',
-    'LINE',
+    # 'LINE',
     'LIST',
     'LNUMBER',
     'LOGICAL_AND',
     'LOGICAL_OR',
     'LOGICAL_XOR',
-    'MATCH',
-    'METHOD_C',
+    # 'MATCH',
+    # 'METHOD_C',
     'MINUS_EQUAL',
+    'MUL_EQUAL',
+    'MOD_EQUAL',
     'NAMESPACE',
-    'NAME_FULLY_QUALIFIED',
-    'NAME_QUALIFIED',
+    'NAMESPACE_NAME',
+    # 'NAME_FULLY_QUALIFIED',
+    # 'NAME_QUALIFIED',
     'NEW',
-    'NS_C',
+    # 'NS_C',
     'NS_SEPARATOR',
-    'NUM_STRING',
-    'OBJECT_CAST',
+    # 'NUM_STRING',
+    # 'OBJECT_CAST',
     'OBJECT_OPERATOR',
-    'NULLSAFE_OBJECT_OPERATOR',
+    # 'NULLSAFE_OBJECT_OPERATOR',
     'OPEN_TAG',
     'OPEN_TAG_WITH_ECHO',
     'OR_EQUAL',
@@ -112,7 +115,7 @@ tokens = (
     'PRIVATE',
     'PROTECTED',
     'PUBLIC',
-    'READONLY',
+    # 'READONLY',
     'REQUIRE',
     'REQUIRE_ONCE',
     'RETURN',
@@ -124,20 +127,20 @@ tokens = (
     'HEREDOC',
     'STATIC',
     'STRING',
-    'STRING_CAST',
-    'STRING_VARNAME',
+    # 'STRING_CAST',
+    # 'STRING_VARNAME',
     'SWITCH',
     'THROW',
     'TRAIT',
-    'TRAIT_C',
+    # 'TRAIT_C',
     'TRY',
     'UNSET',
-    'UNSET_CAST',
+    # 'UNSET_CAST',
     'USE',
     'VAR',
     'VARIABLE',
     'WHILE',
-    'WHITESPACE',
+    # 'WHITESPACE',
     'XOR_EQUAL',
     'YIELD',
     'YIELD_FROM',
@@ -153,13 +156,13 @@ tokens = (
     'SUB',
     'MUL',
     'DIV',
-    'MAP_ITEM',
+    # 'MAP_ITEM',
     'LT',
     'GT',
     'DOLLAR',
     'OBRACK',
     'CBRACK',
-    'BACKQUOTE',
+    # 'BACKQUOTE',
     'SELF',
     'PARENT',
     'NEG',
@@ -184,6 +187,10 @@ tokens = (
     'ENCODING',
     'STRICT_TYPES',
     'ITERABLE',
+    'CONSTRUCT',
+    'DESTRUCT',
+    'DIE',
+    'VOID'
 )
 
 #Regular expression rules for simple tokens
@@ -222,17 +229,17 @@ def t_ARRAY(t):
     r'array'
     return t
 
-def t_ARRAY_CAST(t):
-    r'\(array\)'
-    return t
+# def t_ARRAY_CAST(t):
+#     r'\(array\)'
+#     return t
 
 def t_AS(t):
     r'as'
     return t
 
-def t_ATTRIBUTE(t):
-    r'\#\['
-    return t
+# def t_ATTRIBUTE(t):
+#     r'\#\['
+#     return t
 
 def t_BOOLEAN_AND(t):
     r'\&\&'
@@ -242,9 +249,9 @@ def t_BOOLEAN_OR(t):
     r'\|\|'
     return t
 
-def t_BOOL_CAST(t):
-    r'\(bool\)'
-    return t
+# def t_BOOL_CAST(t):
+#     r'\(bool\)'
+#     return t
 
 def t_BREAK(t):
     r'break'
@@ -262,9 +269,9 @@ def t_CLASS(t):
     r'class'
     return t
 
-def t_CLASS_C(t):
-    r'\_\_CLASS\_\_'
-    return t
+# def t_CLASS_C(t):
+#     r'\_\_CLASS\_\_'
+#     return t
 
 def t_CLONE(t):
     r'clone'
@@ -278,9 +285,9 @@ def t_COALESCE(t):
     r'\?\?'
     return t
 
-def t_COALESCE_EQUAL(t):
-    r'\?\?='
-    return t
+# def t_COALESCE_EQUAL(t):
+#     r'\?\?='
+#     return t
 
 def t_CONST(t):
     r'const'
@@ -314,9 +321,9 @@ def t_DEFAULT(t):
     r'default'
     return t
 
-def t_DIR(t):
-    r'\_\_DIR\_\_'
-    return t
+# def t_DIR(t):
+#     r'\_\_DIR\_\_'
+#     return t
 
 def t_DNUMBER(t):
     r'\d+(\.\d+)?(e(\-)?\d+(.\d+)?)?'
@@ -334,9 +341,9 @@ def t_DOUBLE_ARROW(t):
     r'=\>'
     return t
 
-def t_DOUBLE_CAST(t):
-    r'\(double\)'
-    return t
+# def t_DOUBLE_CAST(t):
+#     r'\(double\)'
+#     return t
 
 def t_DOUBLE_COLON(t):
     r'\:\:'
@@ -362,9 +369,9 @@ def t_EMPTY(t):
     r'empty'
     return t
 
-def t_ENCAPSED_AND_WHITESPACE(t):
-    r'\".*\$.*\"'
-    return t
+# def t_ENCAPSED_AND_WHITESPACE(t):
+#     r'\".*\$.*\"'
+#     return t
 
 def t_ENDDECLARE(t):
     r'enddeclare'
@@ -390,9 +397,9 @@ def t_ENDWHILE(t):
     r'endwhile'
     return t
 
-def t_ENUM(t):
-    r'enum'
-    return t
+# def t_ENUM(t):
+#     r'enum'
+#     return t
 
 def t_EVAL(t):
     r'eval\(\)'
@@ -406,9 +413,9 @@ def t_EXTENDS(t):
     r'extends'
     return t
 
-def t_FILE(t):
-    r'\_\_FILE\_\_'
-    return t
+# def t_FILE(t):
+#     r'\_\_FILE\_\_'
+#     return t
 
 def t_FINAL(t):
     r'final'
@@ -418,25 +425,25 @@ def t_FINALLY(t):
     r'finally'
     return t
 
-def t_FN(t):
-    r'fn'
+# def t_FN(t):
+#     r'fn'
+#     return t
+
+def t_FOREACH(t):
+    r'foreach'
     return t
 
 def t_FOR(t):
     r'for'
     return t
 
-def t_FOREACH(t):
-    r'foreach'
-    return t
-
 def t_FUNCTION(t):
     r'function'
     return t
 
-def t_FUNC_C(t):
-    r'\_\_FUNCTION\_\_'
-    return t
+# def t_FUNC_C(t):
+#     r'\_\_FUNCTION\_\_'
+#     return t
 
 def t_GLOBAL(t):
     r'global'
@@ -446,9 +453,9 @@ def t_GOTO(t):
     r'goto'
     return t
 
-def t_HALT_COMPILER(t):
-    r'\_\_halt\_compiler\(\)'
-    return t
+# def t_HALT_COMPILER(t):
+#     r'\_\_halt\_compiler\(\)'
+#     return t
 
 def t_IF(t):
     r'if'
@@ -482,9 +489,9 @@ def t_INTERFACE(t):
     r'interface'
     return t
 
-def t_INT_CAST(t):
-    r'\(int\)'
-    return t
+# def t_INT_CAST(t):
+#     r'\(int\)'
+#     return t
 
 def t_ISSET(t):
     r'isset\(\)'
@@ -514,9 +521,9 @@ def t_IS_SMALLER_OR_EQUAL(t):
     r'\<='
     return t
 
-def t_LINE(t):
-    r'\_\_LINE\_\_'
-    return t
+# def t_LINE(t):
+#     r'\_\_LINE\_\_'
+#     return t
 
 def t_LIST(t):
     r'list'
@@ -538,13 +545,13 @@ def t_LOGICAL_XOR(t):
     r'xor'
     return t
 
-def t_MATCH(t):
-    r'match'
-    return t
+# def t_MATCH(t):
+#     r'match'
+#     return t
 
-def t_METHOD_C(t):
-    r'\_\_METHOD\_\_'
-    return t
+# def t_METHOD_C(t):
+#     r'\_\_METHOD\_\_'
+#     return t
 
 def t_MINUS_EQUAL(t):
     r'-='
@@ -562,37 +569,41 @@ def t_NAMESPACE(t):
     r'namespace'
     return t
 
-def t_NAME_FULLY_QUALIFIED(t):
-    r'\\\w+\\w+'
+def t_NAMESPACE_NAME(t):
+    r'namespace-name'
     return t
 
-def t_NAME_QUALIFIED(t):
-    r'\w+\\w+'
-    return t
+# def t_NAME_FULLY_QUALIFIED(t):
+#     r'\\\w+\\w+'
+#     return t
+
+# def t_NAME_QUALIFIED(t):
+#     r'\w+\\w+'
+#     return t
 
 def t_NEW(t):
     r'new'
     return t
 
-def t_NS_C(t):
-    r'\_\_NAMESPACE\_\_'
-    return t
+# def t_NS_C(t):
+#     r'\_\_NAMESPACE\_\_'
+#     return t
 
 def t_NS_SEPARATOR(t):
     r'\\'
     return t
 
-def t_OBJECT_CAST(t):
-    r'\(object\)'
-    return t
+# def t_OBJECT_CAST(t):
+#     r'\(object\)'
+#     return t
 
 def t_OBJECT_OPERATOR(t):
     r'-\>'
     return t
 
-def t_NULLSAFE_OBJECT_OPERATOR(t):
-    r'\?-\>'
-    return t
+# def t_NULLSAFE_OBJECT_OPERATOR(t):
+#     r'\?-\>'
+#     return t
 
 def t_OPEN_TAG(t):
     r'\<\?php'
@@ -638,9 +649,9 @@ def t_PUBLIC(t):
     r'public'
     return t
 
-def t_READONLY(t):
-    r'readonly'
-    return t
+# def t_READONLY(t):
+#     r'readonly'
+#     return t
 
 def t_REQUIRE(t):
     r'require'
@@ -678,19 +689,17 @@ def t_SR_EQUAL(t):
     r'\>\>='
     return t
 
-
 def t_STATIC(t):
     r'static'
     return t
 
+# def t_STRING_CAST(t):
+#     r'\(string\)'
+#     return t
 
-def t_STRING_CAST(t):
-    r'\(string\)'
-    return t
-
-def t_STRING_VARNAME(t):
-    r'\"\$\{[a-zA-Z_\x80-\xff][a-zA-Z0-9_\x80-\xff]*\}'
-    return t
+# def t_STRING_VARNAME(t):
+#     r'\"\$\{[a-zA-Z_\x80-\xff][a-zA-Z0-9_\x80-\xff]*\}'
+#     return t
 
 def t_SWITCH(t):
     r'switch'
@@ -704,17 +713,17 @@ def t_TRAIT(t):
     r'trait'
     return t
 
-def t_TRAIT_C(t):
-    r'\_\_TRAIT\_\_'
-    return t
+# def t_TRAIT_C(t):
+#     r'\_\_TRAIT\_\_'
+#     return t
 
 def t_TRY(t):
     r'try'
     return t
 
-def t_UNSET_CAST(t):
-    r'\(unset\)'
-    return t
+# def t_UNSET_CAST(t):
+#     r'\(unset\)'
+#     return t
 
 def t_USE(t):
     r'use'
@@ -728,9 +737,9 @@ def t_WHILE(t):
     r'while'
     return t
 
-def t_WHITESPACE(t):
-    r'\t \r\n'
-    return t
+# def t_WHITESPACE(t):
+#     r'\t \r\n'
+#     return t
 
 def t_XOR_EQUAL(t):
     r'\^='
@@ -804,20 +813,24 @@ def t_ITERABLE(t):
     r'iterable'
     return t
 
-def t_STRING(t):
-    r'[a-zA-Z_\x80-\xff][a-zA-Z0-9_\x80-\xff]*'
+def t_CONSTRUCT(t):
+    r'\_\_construct'
     return t
 
-def t_NUM_STRING(t):
-    r'\"\$[a-zA-Z_\x80-\xff][a-zA-Z0-9_\x80-\xff]*(\[\d+\])+\"'
+def t_DESTRUCT(t):
+    r'\_\_destruct'
     return t
 
-def t_MAP_ITEM(t):
-    r'\$[a-zA-Z_\x80-\xff][a-zA-Z0-9_\x80-\xff]*((\[\d+\])|(\[(\"|\').*(\"|\')\]))+'
+def t_DIE(t):
+    r'die'
     return t
 
-def t_VARIABLE(t):
-    r'\$[a-zA-Z_\x80-\xff][a-zA-Z0-9_\x80-\xff]*'
+def t_CATCH(t):
+    r'catch'
+    return t
+
+def t_VOID(t):
+    r'void'
     return t
 
 def t_SELF(t):
@@ -827,6 +840,23 @@ def t_SELF(t):
 def t_PARENT(t):
     r'parent'
     return t
+
+def t_STRING(t):
+    r'[a-zA-Z_\x80-\xff][a-zA-Z0-9_\x80-\xff]*'
+    return t
+
+# def t_NUM_STRING(t):
+#     r'\"\$[a-zA-Z_\x80-\xff][a-zA-Z0-9_\x80-\xff]*(\[\d+\])+\"'
+#     return t
+
+# def t_MAP_ITEM(t):
+#     r'\$[a-zA-Z_\x80-\xff][a-zA-Z0-9_\x80-\xff]*((\[\d+\])|(\[(\"|\').*(\"|\')\]))+'
+#     return t
+
+def t_VARIABLE(t):
+    r'\$[a-zA-Z_\x80-\xff][a-zA-Z0-9_\x80-\xff]*'
+    return t
+
 
 def t_COMMENT(t):
     r'//.*\n'

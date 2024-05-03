@@ -2,9 +2,9 @@
 
 // Define a multidimensional associative array
 $student_info = array(
-    array("name" => "John", "age" => 20, "grade" => "A"),
-    array("name" => "Emily", "age" => 22, "grade" => "B"),
-    array("name" => "Michael", "age" => 21, "grade" => "C")
+    array ("name" => "John", "age" => 20, "grade" => "A"),
+    array ("name" => "Emily", "age" => 22, "grade" => "B"),
+    array ("name" => "Michael", "age" => 21, "grade" => "C")
 );
 
 // Iterate through the array and print student information
@@ -14,7 +14,7 @@ foreach ($student_info as $student) {
 
 // Define a function to calculate the average of an array of numbers
 function calculate_average($numbers) {
-    $sum = array_sum($numbers);
+    $sum = sum($numbers);
     $count = count($numbers);
     return $sum / $count;
 }
@@ -24,7 +24,7 @@ $numbers = array(10, 20, 30, 40, 50);
 echo "Average: " . calculate_average($numbers) . "\n";
 
 // Define a string with escape characters
-$escaped_string = "This is a \"quoted\" string.";
+$escaped_string = "This is a string.";
 
 // Print the string
 echo $escaped_string . "\n";

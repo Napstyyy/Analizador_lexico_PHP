@@ -5,11 +5,37 @@ import php_lexer
 import sys
 
 VERBOSE = 1
-
+has_errors = False
 
 def p_script(p):
     '''script                           :   script_section
                                         |   script script_section'''
+
+def p_string_literal(p):
+    '''string_literal                   :   CONSTANT_ENCAPSED_STRING
+                                        |   HEREDOC'''
+
+def p_namespace_name(p):
+    '''namespace_name                   :   STRING
+                                        |   namespace_name NS_SEPARATOR STRING'''
+
+def p_namespace_name_as_a_prefix(p):
+    '''namespace_name_as_a_prefix       :   NS_SEPARATOR
+                                        |   NS_SEPARATOR namespace_name NS_SEPARATOR
+                                        |   namespace_name NS_SEPARATOR
+                                        |   NAMESPACE NS_SEPARATOR
+                                        |   NAMESPACE NS_SEPARATOR namespace_name NS_SEPARATOR
+                                        '''
+
+def p_qualified_name(p):
+    '''qualified_name                   :   namespace_name_as_a_prefix STRING
+                                        |   STRING'''
+
+def p_integer_literal(p):
+    '''integer_literal                  :   LNUMBER'''
+
+def p_floating_literal(p):
+    '''floating_literal                 :   DNUMBER'''
 
 def p_script_section(p):
     '''script_section                   :   start_tag statement_list end_tag
@@ -59,11 +85,10 @@ def p_primary_expression(p):
                                         |   prefix_increment_expression
                                         |   prefix_decrement_expression
                                         |   byref_assignment_expression
-                                        |   shell_command_expression
                                         |   OPAR expression CPAR'''
 
 def p_simple_variable(p):
-    '''simple_variable                  :   variable_name
+    '''simple_variable                  :   VARIABLE
                                         |   DOLLAR simple_variable
                                         |   DOLLAR OBRA expression CBRA'''
 
@@ -111,8 +136,10 @@ def p_eval_intrinsic(p):
 def p_exit_intrinsic(p):
     '''exit_intrinsic                   :   EXIT
                                         |   EXIT OPAR expression CPAR
+                                        |   EXIT OPAR CPAR
                                         |   DIE
-                                        |   DIE OPAR expression CPAR'''
+                                        |   DIE OPAR expression CPAR
+                                        |   DIE OPAR CPAR'''
 def p_isset_intrinsic(p):
     '''isset_intrinsic                  :   ISSET OPAR variable_list CPAR'''
 
@@ -121,18 +148,17 @@ def p_variable_list(p):
                                         |   variable_list COMMA variable'''
 
 def p_anonymous_function_creation_expression(p):
-    '''anonymous_function_creation_expression :   STATIC FUNCTION AMPERSAND OPAR parameter_declaration_list CPAR return_type compund_statement
+    '''anonymous_function_creation_expression :   STATIC FUNCTION AMPERSAND OPAR parameter_declaration_list CPAR return_type compound_statement
                                         |   FUNCTION OPAR CPAR compound_statement
                                         |   FUNCTION OPAR parameter_declaration_list CPAR return_type compound_statement
                                         |   FUNCTION AMPERSAND OPAR parameter_declaration_list CPAR return_type compound_statement
                                         |   STATIC FUNCTION OPAR parameter_declaration_list CPAR return_type compound_statement
                                         |   STATIC FUNCTION OPAR CPAR return_type compound_statement
-                                        |   STATIC FUNCTION AMPERSAND OPAR parameter_declaration_list CPAR return_type compound_statement
                                         |   STATIC FUNCTION AMPERSAND OPAR CPAR return_type compound_statement
                                         '''
 
 def p_object_creation_expression(p):
-    '''object_creation_expression       :   NEW class_type_designator OPAR argument_expression_list
+    '''object_creation_expression       :   NEW class_type_designator OPAR argument_expression_list CPAR
                                         |   NEW class_type_designator OPAR CPAR
                                         |   NEW class_type_designator OPAR argument_expression_list COMMA CPAR
                                         |   NEW class_type_designator
@@ -160,8 +186,8 @@ def p_new_variable(p):
                                         |   new_variable DOUBLE_COLON simple_variable'''
 
 def p_array_creation_expression(p):
-    '''array_creation_expression        :   ARRAY OBRA array_initializer CBRA
-                                        |   ARRAY OBRA CBRA
+    '''array_creation_expression        :   ARRAY OPAR array_initializer CPAR
+                                        |   ARRAY OPAR CPAR
                                         |   OBRACK array_initializer CBRACK
                                         |   OBRACK CBRACK'''
 
@@ -227,16 +253,13 @@ def p_postfix_increment_expression(p):
     '''postfix_increment_expression     :   variable INC'''
 
 def p_postfix_decrement_expression(p):
-    '''postfix_increment_expression     :   variable DEC'''
+    '''postfix_decrement_expression     :   variable DEC'''
 
 def p_prefix_increment_expression(p):
     '''prefix_increment_expression      :    INC variable '''
 
 def p_prefix_decrement_expression(p):
     '''prefix_decrement_expression      :    DEC variable'''
-
-def p_shell_command_expression(p):
-    '''shell_command_expression         :   BACKQUOTE TEXT BACKQUOTE'''
 
 def p_scoped_property_access_expression(p):
     '''scoped_property_access_expression :   scope_resolution_qualifier DOUBLE_COLON simple_variable'''
@@ -300,7 +323,7 @@ def p_cast_type(p):
 
 def p_instanceof_expression(p):
     '''instanceof_expression            :   unary_expression
-                                        |   instanceof_subject INSTANCEOF class_type_designator'''
+                                        |   instanceof_subject INSTANCE_OF class_type_designator'''
 def p_instanceof_subject(p):
     '''instanceof_subject               :   instanceof_expression'''
 
@@ -310,7 +333,7 @@ def p_logical_not_expression(p):
 
 def p_multiplicative_expression(p):
     '''multiplicative_expression        :   logical_not_expression
-                                        |   multiplicative_expression MULT logical_not_expression
+                                        |   multiplicative_expression MUL logical_not_expression
                                         |   multiplicative_expression DIV logical_not_expression
                                         |   multiplicative_expression MOD logical_not_expression
                                         '''
@@ -393,7 +416,7 @@ def p_simple_assignment_expression(p):
                                         '''
 
 def p_list_intrinsic(p):
-    '''simple_assignment_expression     :   LIST OPAR list_expression_list CPAR
+    '''list_intrinsic                   :   LIST OPAR list_expression_list CPAR
                                         '''
 
 def p_list_expression_list(p):
@@ -426,11 +449,11 @@ def p_byref_assignment_expression(p):
                                         '''
 
 def p_compound_assignment_expression(p):
-    '''compount_assignment_expression   :   variable compund_assignment_operator assignment_expression
+    '''compound_assignment_expression   :   variable compound_assignment_operator assignment_expression
                                         '''
 
 def p_compound_assignment_operator(p):
-    '''compount_assignment_operator     :   POW_EQUAL
+    '''compound_assignment_operator     :   POW_EQUAL
                                         |   MUL_EQUAL 
                                         |   DIV_EQUAL
                                         |   MOD_EQUAL
@@ -441,10 +464,11 @@ def p_compound_assignment_operator(p):
                                         |   AND_EQUAL
                                         |   XOR_EQUAL
                                         |   OR_EQUAL
+                                        |   CONCAT_EQUAL
                                         '''
 
 def p_yield_from_expression(p):
-    '''yield_from_expression            :   YIELD_FROM assigment_expression'''
+    '''yield_from_expression            :   YIELD_FROM assignment_expression'''
 
 def p_yield_expression(p):
     '''yield_expression                 :   YIELD
@@ -463,12 +487,12 @@ def p_logical_AND_expression_2(p):
 
 def p_logical_exc_OR_expression(p):
     '''logical_exc_OR_expression        :   logical_AND_expression_2
-                                        |   logical_exc_OR_expression LOGICAL_XOR LOGICAL_AND_expression_2
+                                        |   logical_exc_OR_expression LOGICAL_XOR logical_AND_expression_2
                                         '''
 
 def p_logical_inc_OR_expression_2(p):
     '''logical_inc_OR_expression_2      :   logical_exc_OR_expression
-                                        |   logical_inc_OR_expression_2 LOGICAL_OR LOGICAL_exc_OR_expression_2
+                                        |   logical_inc_OR_expression_2 LOGICAL_OR logical_exc_OR_expression
                                         '''
 
 def p_expression(p):
@@ -477,6 +501,7 @@ def p_expression(p):
                                         |   include_once_expression
                                         |   require_expression
                                         |   require_once_expression
+                                        |   assignment_expression
                                         '''
 
 def p_include_expression(p):
@@ -484,7 +509,7 @@ def p_include_expression(p):
                                         '''
 
 def p_include_once_expression(p):
-    '''include_expression               :   INCLUDE_ONCE expression
+    '''include_once_expression          :   INCLUDE_ONCE expression
                                         '''
 
 def p_require_expression(p):
@@ -492,11 +517,14 @@ def p_require_expression(p):
                                         '''
 
 def p_require_once_expression(p):
-    '''require_expression               :   REQUIRE_ONCE expression
+    '''require_once_expression          :   REQUIRE_ONCE expression
                                         '''
 
 def p_constant_expression(p):
-    '''constant_expression              :   expression'''
+    '''constant_expression              :   expression
+                                        |   string_literal
+                                        |   integer_literal
+                                        |   floating_literal'''
 
 def p_statement(p):
     '''statement                        :   compound_statement
@@ -515,6 +543,7 @@ def p_statement(p):
                                         |   interface_declaration
                                         |   trait_declaration
                                         |   namespace_definition
+                                        |   namespace_use_declaration
                                         |   global_declaration
                                         |   function_static_declaration
                                         '''
@@ -550,7 +579,7 @@ def p_if_statement(p):
 
 def p_elseif_clauses_1(p):
     '''elseif_clauses_1                 :   elseif_clause_1
-                                        |   esleif_clauses_1 elseif_clause_1
+                                        |   elseif_clauses_1 elseif_clause_1
                                         '''
 
 def p_elseif_clause_1(p):
@@ -563,7 +592,7 @@ def p_else_clause_1(p):
 
 def p_elseif_clauses_2(p):
     '''elseif_clauses_2                 :   elseif_clause_2
-                                        |   esleif_clauses_2 elseif_clause_2
+                                        |   elseif_clauses_2 elseif_clause_2
                                         '''
 
 def p_elseif_clause_2(p):
@@ -575,8 +604,8 @@ def p_else_clause_2(p):
                                         '''
 
 def p_switch_statement(p):
-    '''switch_statement                 :   SWITCH OPAR expression CPAR OBAR case_statements CBAR
-                                        |   SWITCH OPAR expression CPAR OBAR CBAR
+    '''switch_statement                 :   SWITCH OPAR expression CPAR OBRA case_statements CBRA
+                                        |   SWITCH OPAR expression CPAR OBRA CBRA
                                         |   SWITCH OPAR expression CPAR COLON case_statements ENDSWITCH ENDLINE
                                         '''
 
@@ -619,10 +648,8 @@ def p_do_statement(p):
 def p_for_statement(p):
     '''for_statement                    :   FOR OPAR for_initializer ENDLINE for_control ENDLINE for_end_of_loop CPAR statement  
                                         |   FOR OPAR ENDLINE for_control ENDLINE for_end_of_loop CPAR statement 
-                                        |   FOR OPAR ENDLINE ENDLINE for_end_of_loop CPAR statement 
                                         |   FOR OPAR ENDLINE ENDLINE CPAR statement 
                                         |   FOR OPAR ENDLINE for_control ENDLINE CPAR statement 
-                                        |   FOR OPAR ENDLINE for_control ENDLINE for_end_of_loop CPAR statement 
                                         |   FOR OPAR ENDLINE ENDLINE for_end_of_loop CPAR statement 
                                         |   FOR OPAR for_initializer ENDLINE ENDLINE CPAR statement 
                                         |   FOR OPAR for_initializer ENDLINE for_control ENDLINE for_end_of_loop CPAR COLON statement_list ENDFOR ENDLINE 
@@ -630,8 +657,6 @@ def p_for_statement(p):
                                         |   FOR OPAR ENDLINE ENDLINE for_end_of_loop CPAR COLON statement_list ENDFOR ENDLINE 
                                         |   FOR OPAR ENDLINE ENDLINE CPAR COLON statement_list ENDFOR ENDLINE 
                                         |   FOR OPAR ENDLINE for_control ENDLINE CPAR COLON statement_list ENDFOR ENDLINE 
-                                        |   FOR OPAR ENDLINE for_control ENDLINE for_end_of_loop CPAR COLON statement_list ENDFOR ENDLINE 
-                                        |   FOR OPAR ENDLINE ENDLINE for_end_of_loop CPAR COLON statement_list ENDFOR ENDLINE 
                                         |   FOR OPAR for_initializer ENDLINE ENDLINE CPAR COLON statement_list ENDFOR ENDLINE 
                                         '''
 
@@ -721,7 +746,7 @@ def p_catch_clauses(p):
     '''
 
 def p_catch_clause(p):
-    '''catch_clause                     :   CATCH OPAR catch_name_list variable_name CPAR compound_statement
+    '''catch_clause                     :   CATCH OPAR catch_name_list VARIABLE CPAR compound_statement
     '''
 
 def p_catch_name_list(p):
@@ -764,7 +789,7 @@ def p_function_definition(p):
     '''
 
 def p_function_definition_header(p):
-    '''function_definitio_header        :   FUNCTION AMPERSAND STRING OPAR parameter_declaration_list CPAR return_type
+    '''function_definition_header       :   FUNCTION AMPERSAND STRING OPAR parameter_declaration_list CPAR return_type
                                         |   FUNCTION STRING OPAR parameter_declaration_list CPAR return_type
                                         |   FUNCTION STRING OPAR parameter_declaration_list CPAR
                                         |   FUNCTION STRING OPAR CPAR return_type
@@ -777,6 +802,8 @@ def p_function_definition_header(p):
 def p_parameter_declaration_list(p):
     '''parameter_declaration_list       :   simple_parameter_declaration_list
                                         |   variadic_parameter_declaration_list
+                                        |   parameter_declaration
+                                        |   parameter_declaration_list COMMA parameter_declaration
     '''
 
 
@@ -838,16 +865,16 @@ def p_default_argument_specifier(p):
     '''
 
 def p_class_declaration(p):
-    '''class_declaration                :   class_modifier CLASS STRING class_base_clause class_interface_clause OBRA class_member_declaration CBRA
-                                        |   class_modifier CLASS STRING class_base_clause class_interface_clause OBRACBRA
-                                        |   class_modifier CLASS STRING class_base_clause OBRACBRA
-                                        |   class_modifier CLASS STRING OBRACBRA
-                                        |   CLASS STRING OBRACBRA
-                                        |   class_modifier CLASS STRING class_base_clause OBRA class_member_declaration CBRA
-                                        |   class_modifier CLASS STRING OBRA class_member_declaration CBRA
-                                        |   CLASS STRING OBRA class_member_declaration CBRA
-                                        |   class_modifier CLASS STRING class_interface_clause OBRA class_member_declaration CBRA
-                                        |    CLASS STRING class_interface_clause OBRA class_member_declaration CBRA
+    '''class_declaration                :   class_modifier CLASS STRING class_base_clause class_interface_clause OBRA class_member_declarations CBRA
+                                        |   class_modifier CLASS STRING class_base_clause class_interface_clause OBRA CBRA
+                                        |   class_modifier CLASS STRING class_base_clause OBRA CBRA
+                                        |   class_modifier CLASS STRING OBRA CBRA
+                                        |   CLASS STRING OBRA CBRA
+                                        |   class_modifier CLASS STRING class_base_clause OBRA class_member_declarations CBRA
+                                        |   class_modifier CLASS STRING OBRA class_member_declarations CBRA
+                                        |   CLASS STRING OBRA class_member_declarations CBRA
+                                        |   class_modifier CLASS STRING class_interface_clause OBRA class_member_declarations CBRA
+                                        |    CLASS STRING class_interface_clause OBRA class_member_declarations CBRA
     '''
 
 def p_class_modifier(p):
@@ -863,12 +890,244 @@ def p_class_interface_clause(p):
                                         |   class_interface_clause COMMA qualified_name
     '''
 
+def p_class_member_declarations(p):
+    '''class_member_declarations        :   class_member_declaration
+                                        |   class_member_declarations class_member_declaration
+    '''
+
+def p_class_member_declaration(p):
+    '''class_member_declaration         :   class_const_declaration
+                                        |   property_declaration
+                                        |   method_declaration
+                                        |   constructor_declaration
+                                        |   destructor_declaration
+                                        |   trait_use_clause
+    '''
+
+def p_const_declaration(p):
+    '''const_declaration                :   CONST const_elements ENDLINE'''
+
+def p_class_const_declaration(p):
+    '''class_const_declaration          :   visibility_modifier CONST const_elements ENDLINE
+                                        |   CONST const_elements ENDLINE
+    '''
+
+def p_const_elements(p):
+    '''const_elements                   :   const_element
+                                        |   const_elements COMMA const_element
+    '''
+
+def p_const_element(p):
+    '''const_element                    :   STRING ASSIGN constant_expression
+    '''
+
+def p_property_declaration(p):
+    '''property_declaration             :   property_modifier property_elements ENDLINE
+    '''
+
+def p_property_modifier(p):
+    '''property_modifier                :   VAR
+                                        |   visibility_modifier static_modifier
+                                        |   static_modifier visibility_modifier 
+                                        |   visibility_modifier 
+                                        |   static_modifier 
+    '''
+
+def p_visibility_modifier(p):
+    '''visibility_modifier              :   PUBLIC
+                                        |   PROTECTED
+                                        |   PRIVATE
+    '''
+
+def p_static_modifier(p):
+    '''static_modifier                  :   STATIC
+    '''
+
+def p_property_elements(p):
+    '''property_elements                :   property_element
+                                        |   property_elements property_element
+    '''
+
+def p_property_element(p):
+    '''property_element                 :   VARIABLE property_initializer ENDLINE
+    '''
+
+def p_property_initializer(p):
+    '''property_initializer             :   ASSIGN constant_expression
+    '''
+
+def p_method_declaration(p):
+    '''method_declaration               :   method_modifiers function_definition
+                                        |   function_definition 
+                                        |   method_modifiers function_definition_header ENDLINE
+    '''
+
+def p_method_modifiers(p):
+    '''method_modifiers                 :   method_modifier
+                                        |   method_modifiers method_modifier 
+    '''
+
+def p_method_modifier(p):
+    '''method_modifier                  :   visibility_modifier
+                                        |   static_modifier
+                                        |   class_modifier
+    '''
+
+def p_constructor_declaration(p):
+    '''constructor_declaration          :   method_modifiers FUNCTION AMPERSAND CONSTRUCT OPAR parameter_declaration_list CPAR compound_statement
+                                        |   method_modifiers FUNCTION CONSTRUCT OPAR parameter_declaration_list CPAR compound_statement                                        
+                                        |   method_modifiers FUNCTION AMPERSAND CONSTRUCT OPAR CPAR compound_statement                                        
+                                        |   method_modifiers FUNCTION CONSTRUCT OPAR CPAR compound_statement                                        
+    '''
+
+def p_destructor_declaration(p):
+    '''destructor_declaration           :   method_modifiers FUNCTION AMPERSAND DESTRUCT OPAR CPAR compound_statement
+                                        |   method_modifiers FUNCTION CONSTRUCT OPAR CPAR compound_statement 
+    '''
+
+def p_interface_declaration(p):
+    '''interface_declaration            :   INTERFACE STRING interface_base_clause OBRA interface_member_declarations CBRA
+                                        |   INTERFACE STRING OBRA interface_member_declarations CBRA
+                                        |   INTERFACE STRING interface_base_clause OBRA CBRA
+                                        |   INTERFACE STRING OBRA CBRA
+    '''
+
+def p_interface_base_clause(p):
+    '''interface_base_clause            :   EXTENDS qualified_name
+                                        |   interface_base_clause COMMA qualified_name
+    '''
+
+def p_interface_member_declarations(p):
+    '''interface_member_declarations    :   interface_member_declaration
+                                        |   interface_member_declarations interface_member_declaration
+    '''
+
+def p_interface_member_declaration(p):
+    '''interface_member_declaration     :   class_const_declaration
+                                        |   method_declaration
+    '''
+
+def p_trait_declaration(p):
+    '''trait_declaration                :   TRAIT STRING OBRA CBRA
+                                        |   TRAIT STRING OBRA trait_member_declarations CBRA
+    '''
+    
+def p_trait_member_declarations(p):
+    '''trait_member_declarations        :   trait_member_declaration
+                                        |   trait_member_declarations trait_member_declaration
+    '''
+    
+def p_trait_member_declaration(p):
+    '''trait_member_declaration         :   property_declaration
+                                        |   method_declaration
+                                        |   constructor_declaration
+                                        |   destructor_declaration
+                                        |   trait_use_clauses
+    '''
+    
+def p_trait_use_clauses(p):
+    '''trait_use_clauses                :   trait_use_clause
+                                        |   trait_use_clauses trait_use_clause
+    '''
+    
+def p_trait_use_clause(p):
+    '''trait_use_clause                 :   USE trait_name_list trait_use_specification
+    '''
+
+def p_trait_name_list(p):
+    '''trait_name_list                  :   qualified_name
+                                        |   trait_name_list COMMA qualified_name
+    '''    
+
+def p_trait_use_specification(p):
+    '''trait_use_specification          :   COMMA
+                                        |   OBRA CBRA
+                                        |   OBRA trait_select_and_alias_clauses CBRA
+    '''
+    
+def p_trait_select_and_alias_clauses(p):
+    '''trait_select_and_alias_clauses   :   trait_select_and_alias_clause
+                                        |   trait_select_and_alias_clauses trait_select_and_alias_clause
+    '''
+
+def p_trait_select_and_alias_clause(p):
+    '''trait_select_and_alias_clause    :   trait_select_insteadof_clause ENDLINE
+                                        |   trait_alias_as_clause ENDLINE
+    '''        
+
+def p_trait_select_insteadof_clause(p):
+    '''trait_select_insteadof_clause    :   qualified_name DOUBLE_COLON STRING INSTEADOF trait_name_list
+    '''
+    
+def p_trait_alias_as_clause(p):
+    '''trait_alias_as_clause            :   STRING AS STRING
+                                        |   STRING AS visibility_modifier STRING
+                                        |   STRING AS visibility_modifier
+    '''
+
+def p_namespace_definition(p):
+    '''namespace_definition             :   NAMESPACE namespace_name ENDLINE
+                                        |   NAMESPACE namespace_name compound_statement
+                                        |   NAMESPACE compound_statement
+    '''
+    
+def p_namespace_use_declaration(p):
+    '''namespace_use_declaration        :   USE namespace_function_or_const namespace_use_clauses ENDLINE
+                                        |   USE namespace_use_clauses ENDLINE
+                                        |   USE namespace_function_or_const NS_SEPARATOR namespace_name NS_SEPARATOR OBRA namespace_use_group_clauses_1 CBRA ENDLINE
+                                        |   USE namespace_function_or_const namespace_name NS_SEPARATOR OBRA namespace_use_group_clauses_1 CBRA ENDLINE
+                                        |   USE NS_SEPARATOR NAMESPACE_NAME NS_SEPARATOR OBRA namespace_use_group_clauses_2 CBRA ENDLINE
+                                        |   USE NAMESPACE_NAME NS_SEPARATOR OBRA namespace_use_group_clauses_2 CBRA ENDLINE
+    '''
+
+def p_namespace_use_clauses(p):
+    '''namespace_use_clauses            :   namespace_use_clause
+                                        |   namespace_use_clauses COMMA namespace_use_clause
+    '''
+
+def p_namespace_use_clause(p):
+    '''namespace_use_clause             :   qualified_name namespace_aliasing_clause
+                                        |   qualified_name
+    '''
+    
+def p_namespace_aliasing_clause(p):
+    '''namespace_aliasing_clause        :   AS STRING
+    '''
+    
+def p_namespace_function_or_const(p):
+    '''namespace_function_or_const      :   FUNCTION
+                                        |   CONST
+    '''
+    
+def p_namespace_use_group_clauses_1(p):
+    '''namespace_use_group_clauses_1    :   namespace_use_group_clause_1
+                                        |   namespace_use_group_clauses_1 COMMA namespace_use_group_clause_1
+    '''
+
+def p_namespace_use_group_clause_1(p):
+    '''namespace_use_group_clause_1     :   namespace_name namespace_aliasing_clause
+                                        |   namespace_name
+    '''
+    
+def p_namespace_use_group_clauses_2(p):
+    '''namespace_use_group_clauses_2    :   namespace_use_group_clause_2
+                                        |   namespace_use_group_clauses_2 COMMA namespace_use_group_clause_2
+    '''
+    
+def p_namespace_use_group_clause_2(p):
+    '''namespace_use_group_clause_2     :   namespace_function_or_const namespace_name namespace_aliasing_clause
+                                        |   namespace_function_or_const namespace_name
+                                        |   namespace_name namespace_aliasing_clause
+    '''
+
 def p_error(p):
+    global has_errors
+    has_errors = True
     if VERBOSE:
         if p is not None:
-            print("ERROR SINTACTICO EN LA LINEA: " + str(p.lexer.lineno) + " NO SE ESPERABA EL TOKEN " + str(p.value))
+            print("ERROR SINTACTICO, NO SE ESPERABA EL TOKEN " + str(p.value))
         else:
-            print("ERROR SINTACTICO EN LA LINEA: " + str(p.lexer.lineno))
+            print("ERROR SINTACTICO")
     else:
         raise Exception("syntax", "error")
 
@@ -881,5 +1140,8 @@ if __name__ == "__main__":
         fin = "index.php"
     f = open(fin, "r")
     data = f.read()
-    parser.parse(data, tracking = True)
-    print("Amigazo, que chimba de parser. Completamente parsero")
+    parser.parse(data, debug = True)
+    if not has_errors:
+        print("Amigazo, que chimba de parser. Completamente parsero")
+    else:
+        print("Amiguito, muy poco parsero. Solucione")

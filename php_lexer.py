@@ -325,10 +325,6 @@ def t_DEFAULT(t):
 #     r'\_\_DIR\_\_'
 #     return t
 
-def t_DNUMBER(t):
-    r'\d+(\.\d+)?(e(\-)?\d+(.\d+)?)?'
-    return t
-
 def t_DO(t):
     r'do'
     return t
@@ -531,6 +527,10 @@ def t_LIST(t):
 
 def t_LNUMBER(t):
     r'\d+'
+    return t
+
+def t_DNUMBER(t):
+    r'\d+(\.\d+)?(e(\-)?\d+(.\d+)?)?'
     return t
 
 def t_LOGICAL_AND(t):

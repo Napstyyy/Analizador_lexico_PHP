@@ -205,6 +205,16 @@ def p_array_element_initializer(p):
                                         |   element_key DOUBLE_ARROW DOLLAR element_value
                                         |   element_key DOUBLE_ARROW element_value'''
 
+def p_matrix(p):
+    '''matrix                           :   VARIABLE matrix_access_group ASSIGN assignment_expression'''
+
+def p_matrix_access_group(p):
+    '''matrix_access_group              :   matrix_access
+                                        |   matrix_access_group matrix_access'''
+
+def p_matrix_access(p):
+    '''matrix_access                    :   OBRACK integer_literal CBRACK'''
+
 def p_element_key(p):
     '''element_key                      :   expression'''
 
@@ -408,6 +418,7 @@ def p_assignment_expression(p):
     '''assignment_expression            :   conditional_expression
                                         |   simple_assignment_expression
                                         |   compound_assignment_expression
+                                        |   matrix
                                         '''
 
 def p_simple_assignment_expression(p):
